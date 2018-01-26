@@ -2,10 +2,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col m6 s12">
-            <app-editor></app-editor>
+            <app-editor [fileId]="selectedFileId"></app-editor>
         </div>
         <div class="col m6 s12">
-            <app-files-list></app-files-list>
+            <app-files-list (fileSelected)="fileSelected($event);"></app-files-list>
         </div>
     </div>
 </div>

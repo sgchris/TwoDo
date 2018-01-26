@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChange, Renderer, ViewChild, Input } from '@angular/core';
 
 @Component({
   selector: 'app-editor',
@@ -6,21 +6,36 @@ import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
+    // elements bindings
     @ViewChild('editFilenameEl') inputFilenameEl:ElementRef;
     @ViewChild('actualContentEl') actualContentEl:ElementRef;
 
+    // inputs
+    @Input('fileId') fileId:number;
+
+    // local vars
     filename = 'Unnamed'
     editFilenameInProgress = false
+    actualContent = ''
+    originalContent = ''
 
-    actualContent = 'Some quick example text to build on the card title and make up the bulk of the card\'s content.'
-    originalContent = 'Some quick example text to build on the card title and make up the bulk of the card\'s content.'
-
-    constructor() { }
+    constructor() {
+        console.log('constructor', this.fileId);
+    }
 
     ngOnInit() { }
 
+    ngOnChanges(changes) {
+        console.log('ngOnChanges changes', changes);
+        console.log('ngOnChanges fileId', this.fileId);
+    }
+
     setFocus(el) {
         setTimeout(() => {el.focus();});
+    }
+
+    loadFile() {
+        console.log('loading file', this.fileId);
     }
 
     editFilename() {

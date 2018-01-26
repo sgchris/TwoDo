@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'TwoDo';
+    title = 'TwoDo';
+
+    selectedFileId = false;
+
+    fileSelected(fileSelected) {
+        console.log('app', fileSelected);
+        this.selectedFileId = fileSelected;
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -7,21 +7,23 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./files-list.component.css']
 })
 export class FilesListComponent implements OnInit {
+    @Output() fileSelected = new EventEmitter<number>();
 
     files = [{
         id: 1, name: 'file1'
     }, {
         id: 2, name: 'another_file'
     }];
-    selectedFile = false;
+    selectedFileId = false;
 
     constructor() { }
 
     ngOnInit() { }
 
     openFile(fileId:number) {
-        this.selectedFile = fileId;
-        console.log('selectedFile', this.selectedFile);
+        this.selectedFileId = fileId;
+        this.fileSelected.emit(this.selectedFileId);
+        console.log('selectedFile', this.selectedFileId);
     }
 
 }
