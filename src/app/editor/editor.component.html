@@ -2,11 +2,11 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">
-            <span *ngIf="!editTitleInProgress">{{title}} <button type="button" (click)="editTitle()" class="btn btn-secondary btn-sm" *ngIf="!editTitleInProgress">Edit</button></span>
-            <div *ngIf=" editTitleInProgress">
-                <form class="inline" (submit)="$event.preventDefault(); updateTitle();">
+            <span [hidden]="editFilenameInProgress">{{filename}} <button type="button" (click)="editFilename()" class="btn btn-secondary btn-sm" *ngIf="!editFilenameInProgress">Edit</button></span>
+            <div [hidden]="!editFilenameInProgress">
+                <form class="inline" (submit)="$event.preventDefault(); updateFilename();">
                     <div class="input-group">
-                        <input type="text" id="edit-title" class="form-control" [value]="title" (input)="title = $event.target.value" />
+                        <input #editFilenameEl type="text" class="form-control" [value]="filename" (input)="filename = $event.target.value" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
@@ -14,6 +14,10 @@
                 </form>
             </div>
         </h5>
-        <p class="card-text alert alert-secondary" contenteditable="true" autofocus="true">{{actualContent}}</p>
+        <p #actualContentEl class="card-text alert alert-secondary" contenteditable="true"
+            (input)="saveCursorPosition()"
+            (blur)="saveCursorPosition()"
+            (focus)="loadCursorPosition()"
+            >{{actualContent}}</p>
     </div>
 </div>
