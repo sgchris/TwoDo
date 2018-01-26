@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import * as Globals from '../config';
 
 @Component({
   selector: 'app-files-list',
@@ -7,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./files-list.component.css']
 })
 export class FilesListComponent implements OnInit {
-    @Output() fileSelected = new EventEmitter<number>();
+    @Output() fileSelected = new EventEmitter<any>();
 
     files = [{
         id: 1, name: 'file1'
@@ -16,14 +17,22 @@ export class FilesListComponent implements OnInit {
     }];
     selectedFileId = false;
 
-    constructor() { }
+    constructor(private http:HttpClient) {
+        this.loadFilesList();
+    }
 
     ngOnInit() { }
 
-    openFile(fileId:number) {
+    openFile(fileId) {
+        // store the selected file locally
         this.selectedFileId = fileId;
+
+        // broadcast
         this.fileSelected.emit(this.selectedFileId);
-        console.log('selectedFile', this.selectedFileId);
+    }
+
+    loadFilesList() {
+        this.http.get(Globals.API_BASE_URL + 'get_files.php').subscribe(res => console.log('res', res));
     }
 
 }

@@ -8,10 +8,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
     title = 'TwoDo';
 
+    // param to "editor" component
     selectedFileId = false;
 
     fileSelected(fileSelected) {
-        console.log('app', fileSelected);
         this.selectedFileId = fileSelected;
     }
 }
