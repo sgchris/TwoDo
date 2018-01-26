@@ -1,0 +1,9 @@
+.file-wrapper {
+    width: 10rem;
+    margin:0 10px 10px 0;
+    cursor: pointer;
+}
+
+.selected-file {
+    background: #DEF;
+}

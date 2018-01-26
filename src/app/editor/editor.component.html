@@ -2,10 +2,11 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">
-            <span [hidden]="editFilenameInProgress">{{filename}} <button type="button" (click)="editFilename()" class="btn btn-secondary btn-sm" *ngIf="!editFilenameInProgress">Edit</button></span>
+            <button type="button" (click)="deleteFile()" class="btn btn-danger btn-sm float-right" title="Delete this file">Delete this file</button>
+            <span [hidden]="editFilenameInProgress" (dblclick)="editFilename()">{{filename}}</span>
             <div [hidden]="!editFilenameInProgress">
-                <form class="inline" (submit)="$event.preventDefault(); updateFilename();">
-                    <div class="input-group">
+                <form class="form-inline" (submit)="$event.preventDefault(); updateFilename();">
+                    <div class="input-group input-group-sm">
                         <input #editFilenameEl type="text" class="form-control" [value]="filename" (input)="filename = $event.target.value" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -14,10 +15,6 @@
                 </form>
             </div>
         </h5>
-        <p #actualContentEl class="card-text alert alert-secondary" contenteditable="true"
-            (input)="saveCursorPosition()"
-            (blur)="saveCursorPosition()"
-            (focus)="loadCursorPosition()"
-            >{{actualContent}}</p>
     </div>
+    <div #actualContentEl class="card-text alert bg-light border" contenteditable="true">{{actualContent}}</div>
 </div>

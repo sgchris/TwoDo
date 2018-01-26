@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-files-list',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FilesListComponent implements OnInit {
 
-  constructor() { }
+    files = [{
+        id: 1, name: 'file1'
+    }, {
+        id: 2, name: 'another_file'
+    }];
+    selectedFile = false;
 
-  ngOnInit() {
-  }
+    constructor() { }
+
+    ngOnInit() { }
+
+    openFile(fileId:number) {
+        this.selectedFile = fileId;
+        console.log('selectedFile', this.selectedFile);
+    }
 
 }
