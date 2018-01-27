@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as Globals from '../config';
 
 @Component({
@@ -10,11 +10,7 @@ import * as Globals from '../config';
 export class FilesListComponent implements OnInit {
     @Output() fileSelected = new EventEmitter<any>();
 
-    files = [{
-        id: 1, name: 'file1'
-    }, {
-        id: 2, name: 'another_file'
-    }];
+    files = [];
     selectedFileId = false;
 
     constructor(private http:HttpClient) {
@@ -31,8 +27,21 @@ export class FilesListComponent implements OnInit {
         this.fileSelected.emit(this.selectedFileId);
     }
 
+    createFile() {
+        this.http.post(Globals.API_BASE_URL + 'add_file.php',
+        new HttpParams().set('name', prompt('New file name')).toString(), {
+          headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+      }).subscribe(res => {
+          this.loadFilesList();
+      })
+    }
+
     loadFilesList() {
-        this.http.get(Globals.API_BASE_URL + 'get_files.php').subscribe(res => console.log('res', res));
+        this.http.get(Globals.API_BASE_URL + 'get_files.php').subscribe(res => {
+            if (res.result == 'ok') {
+                this.files = res.files;
+            }
+        });
     }
 
 }

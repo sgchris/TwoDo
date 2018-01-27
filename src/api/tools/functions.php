@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 
- * @param <unknown> $errorStr 
- * @return  
+ *
+ * @param <unknown> $errorStr
+ * @return
  */
 function _exit($errorStr) {
 	echo json_encode(['result' => 'error', 'error' => $errorStr]);
@@ -12,7 +12,7 @@ function _exit($errorStr) {
 
 /**
  * return success message JSON
- * @param string|number|array $successData 
+ * @param string|number|array $successData
  * @return null
  */
 function _success($successData = null) {
@@ -23,7 +23,7 @@ function _success($successData = null) {
 	} elseif (is_array($successData)) {
 		echo json_encode(array_merge($successData, ['result' => 'ok']));
 	}
-	
+
 	exit;
 }
 
@@ -39,8 +39,8 @@ function _log() {
 	} elseif (file_exists(LOG_FILE_PATH) && !is_writable(LOG_FILE_PATH)) {
 		_exit('Cannot modify log file');
 	}
-	
-	
+
+
 	$logElements = [];
 	if (func_num_args() > 0) {
 		foreach (func_get_args() as $arg) {
@@ -51,10 +51,10 @@ function _log() {
 			}
 		}
 	}
-	
+
 	$parsedUrl = parse_url($_SERVER['REQUEST_URI']);
 	$apiFileName = basename($parsedUrl['path']);
-	
+
 	$logStr = date('d.M.Y H:i:s') . ' ' . $apiFileName . ': ' . implode(' ', $logElements) . "\r\n";
 	$res = @file_put_contents(LOG_FILE_PATH, $logStr, FILE_APPEND);
 	return (is_numeric($res) && $res > 0);
@@ -62,7 +62,7 @@ function _log() {
 
 /**
  * Check if the script is running from web or as a CLI
- * 
+ *
  * @return bool
  */
 function isCommandLineInterface() {
@@ -72,26 +72,26 @@ function isCommandLineInterface() {
 /**
  * define that the current request should be allowed only to "$allowedUsers"
  * (defined in the config file)
- * @return  
+ * @return
  */
 function setRestrictedAccess() {
 	global $allowedUsers;
-	
+
 	// wait, while the user is stored in the session
 	$counter = 30;
 	while (!isset($_SESSION) || !isset($_SESSION['user']) || !isset($_SESSION['user']['name'])) {
 		// in milliseconds
 		usleep(100 * 1000);
-		
+
 		if (--$counter < 0) {
 			break;
 		}
 	}
-	
+
 	if (!isset($_SESSION) || !isset($_SESSION['user']) || !isset($_SESSION['user']['name'])) {
 		_exit('Not logged in');
 	}
-	
+
 	if (!in_array($_SESSION['user']['name'], $allowedUsers)) {
 		_exit('no permissions to do that operation');
 	}
@@ -99,8 +99,8 @@ function setRestrictedAccess() {
 
 /**
  * Check the request method
- * @param <unknown> $requestMethod 
- * @return  
+ * @param <unknown> $requestMethod
+ * @return
  */
 function requestShouldBe($requestMethod) {
 	$requestMethod = strtoupper($requestMethod);
@@ -111,9 +111,9 @@ function requestShouldBe($requestMethod) {
 
 /**
  * Get list of parameters from the request params (POST or GET)
- * @param array $paramsList 
- * @param array $mandatoryParams 
- * @return  
+ * @param array $paramsList
+ * @param array $mandatoryParams
+ * @return
  */
 function receiveParams(array $paramsList, array $mandatoryParams = array()) {
 	$params = array();
@@ -124,14 +124,14 @@ function receiveParams(array $paramsList, array $mandatoryParams = array()) {
 			}
 		}
 	}
-	
+
 	// check mandatory params
 	foreach ($mandatoryParams as $mandatoryParam) {
 		if (!isset($params[$mandatoryParam])) {
 			_exit('missing '.$mandatoryParam.' parameter');
 		}
 	}
-	
+
 	return $params;
 }
 
@@ -141,7 +141,7 @@ function receiveParams(array $paramsList, array $mandatoryParams = array()) {
  */
 function checkUploadFolder() {
 	$uploadFolder = IMAGES_UPLOAD_PATH;
-	
+
 	// check if the folder exists
 	if (!file_exists($uploadFolder)) {
 		if (is_writeable(dirname($uploadFolder))) {
@@ -153,7 +153,7 @@ function checkUploadFolder() {
 			_exit('no permissions to create upload folder');
 		}
 	}
-	
+
 	// check if uploading image is possible
 	if (!is_writeable($uploadFolder)) {
 		_exit('no write permissions to the images upload folder');
@@ -163,59 +163,59 @@ function checkUploadFolder() {
 
 /**
  * Check if the value is in the range
- * @param <unknown> $var 
- * @param <unknown> $min 
- * @param <unknown> $max 
- * @param <unknown> $includingMin 
- * @param <unknown> $includingMax 
- * @return  
+ * @param <unknown> $var
+ * @param <unknown> $min
+ * @param <unknown> $max
+ * @param <unknown> $includingMin
+ * @param <unknown> $includingMax
+ * @return
  */
 function between($var, $min, $max, $includingMin = true, $includingMax = true) {
 	$condA = $var > $min;
 	if ($includingMin) {
 		$condA = $var >= $min;
 	}
-	
+
 	$condB = $var < $max;
 	if ($includingMin) {
 		$condB = $var <= $max;
 	}
-	
+
 	return $condA && $condB;
 }
 
 
 /**
  * Execute statement with error check
- * @param string $sql 
- * @param array $paramsArray 
- * @return array 
+ * @param string $sql
+ * @param array $paramsArray
+ * @return array
  */
 function executeQuery($sql, array $paramsArray = array(), $returnResultSet = true, $fetchOnlyOne = false) {
 	global $db;
-	
+
 	// prepare
 	$stmt = $db->prepare($sql);
 	if (!$stmt) {
 		_exit($db->errorInfo());
 	}
-	
+
 	// execute
 	$result = $stmt->execute($paramsArray);
 	if (!$result) {
 		_exit($stmt->errorInfo());
 	}
-	
-	return $returnResultSet ? 
-		($fetchOnlyOne ? $stmt->fetch() : $stmt->fetchAll()) : 
+
+	return $returnResultSet ?
+		($fetchOnlyOne ? $stmt->fetch() : $stmt->fetchAll()) :
 		true;
 }
 
 
 /**
  * Execute query without getting the result
- * @param string $sql 
- * @param array $paramsArray 
+ * @param string $sql
+ * @param array $paramsArray
  * @return boolean
  */
 function dbExec($sql, array $paramsArray = array()) {
@@ -224,8 +224,8 @@ function dbExec($sql, array $paramsArray = array()) {
 
 /**
  * Execute query and get the results - list of rows
- * @param string $sql 
- * @param array $paramsArray 
+ * @param string $sql
+ * @param array $paramsArray
  * @return array
  */
 function dbQuery($sql, array $paramsArray = array()) {
@@ -234,8 +234,8 @@ function dbQuery($sql, array $paramsArray = array()) {
 
 /**
  * Execute query and get the result as one row array
- * @param string $sql 
- * @param array $paramsArray 
+ * @param string $sql
+ * @param array $paramsArray
  * @return array
  */
 function dbRow($sql, array $paramsArray = array()) {
@@ -244,22 +244,22 @@ function dbRow($sql, array $paramsArray = array()) {
 
 /**
  * Get model details
- * @param number $modelId 
+ * @param number $modelId
  * @return array
  */
 function getModelDetails($modelId) {
 	global $db;
-	
+
 	// get the model from the DB
 	$modelRow = dbRow('select * from models where id = :model_id', array(
 		':model_id' => $modelId
 	));
-	
+
 	// check that she exists
 	if (!$modelRow) {
 		_exit('cannot find the model');
 	}
-	
+
 	return $modelRow;
 }
 
@@ -267,7 +267,7 @@ function getModelDetails($modelId) {
 
 /**
  * Get name that consists only of letters and numbers
- * @param string $name 
+ * @param string $name
  * @return string
  */
 function getAlphanumericName($name) {
@@ -277,11 +277,9 @@ function getAlphanumericName($name) {
 
 /**
  * Get random hash
- * @param integer $length 
+ * @param integer $length
  * @return string
  */
 function getRandHash($length = 16) {
 	return substr(md5(mt_rand(0, pow(10, 10))), 0, $length);
 }
-
-
