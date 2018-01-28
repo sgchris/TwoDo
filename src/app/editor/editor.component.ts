@@ -1,6 +1,7 @@
 import { Component, OnInit, Renderer, ViewChild, Input, ElementRef } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import * as Globals from '../config';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import * as Config from '../config';
+
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
@@ -25,7 +26,6 @@ export class EditorComponent implements OnInit {
     ngOnInit() { }
 
     ngOnChanges(changes) {
-        console.log('EditorComponent field id changed', this.fileId);
         this.loadFile();
     }
 
@@ -39,8 +39,14 @@ export class EditorComponent implements OnInit {
         }
 
         let params = new HttpParams().set('file_id', this.fileId);
-        this.http.get(Globals.API_BASE_URL + 'get_file_data.php', {params: params}).subscribe(res => console.log('res', res));
-        console.log('loading file', this.fileId);
+        this.http.get(Config.API_BASE_URL + 'get_file_data.php', {params: params}).subscribe(res => {
+            if (res['result'] == 'ok') {
+                console.log('setting new data', res);
+                this.filename = res['data']['name'];
+                this.originalContent = res['data']['content'];
+                this.actualContent = this.originalContent;
+            }
+        });
     }
 
     editFilename() {
@@ -59,7 +65,24 @@ export class EditorComponent implements OnInit {
         this.setFocus(this.actualContentEl.nativeElement);
     }
 
-    deleteFile() {
-        console.log('deleting', this.filename);
+    saveFile() {
+        // prepare the new content
+        const newContent = this.actualContentEl.nativeElement.innerHTML;
+
+        // prepare request parameters
+        const requestUrl = Config.API_BASE_URL + 'add_file_version.php';
+        const requestParams = new HttpParams()
+            .set('file_id', this.fileId)
+            .set('content', newContent);
+        const requestOptions = {
+            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+        };
+
+        // perform the request
+        this.http.post(requestUrl, requestParams.toString(), requestOptions).subscribe(res => {
+            if (res['result'] == 'ok') {
+                this.originalContent = newContent;
+            }
+        });
     }
 }
