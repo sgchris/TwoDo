@@ -23,4 +23,4 @@ if (!$res) {
 	_exit('cannot create file');
 }
 
-_success();
+_success(['file_id' => $db->lastInsertId()]);

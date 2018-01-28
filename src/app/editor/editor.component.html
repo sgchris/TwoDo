@@ -2,7 +2,7 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">
-            <button type="button" [disabled]="actualContent == originalContent" (click)="saveFile()" class="btn btn-primary btn-sm float-right" title="Save changes">Save changes</button>
+            <button type="button" [disabled]="!changesMade" (click)="saveFile()" class="btn btn-primary btn-sm float-right" title="Save changes">Save changes</button>
             <span [hidden]="editFilenameInProgress" (dblclick)="editFilename()">{{filename}}</span>
             <div [hidden]="!editFilenameInProgress">
                 <form class="form-inline" (submit)="$event.preventDefault(); updateFilename();">
@@ -16,5 +16,8 @@
             </div>
         </h5>
     </div>
-    <div #actualContentEl class="card-text alert bg-light border" contenteditable="true" [innerHTML]="actualContent"></div>
+    <div #actualContentEl class="card-text alert bg-light border"
+        contenteditable="true"
+        [innerHTML]="actualContent"
+        (input)="changesMade = true"></div>
 </div>

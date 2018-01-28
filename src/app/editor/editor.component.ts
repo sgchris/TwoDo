@@ -20,12 +20,14 @@ export class EditorComponent implements OnInit {
     editFilenameInProgress = false
     actualContent = ''
     originalContent = ''
+    changesMade = false;
 
     constructor(private http:HttpClient) { }
 
     ngOnInit() { }
 
     ngOnChanges(changes) {
+        console.log('changes', changes);
         this.loadFile();
     }
 
@@ -45,6 +47,7 @@ export class EditorComponent implements OnInit {
                 this.filename = res['data']['name'];
                 this.originalContent = res['data']['content'];
                 this.actualContent = this.originalContent;
+                this.changesMade = false;
             }
         });
     }
@@ -66,6 +69,8 @@ export class EditorComponent implements OnInit {
     }
 
     saveFile() {
+        if (!this.fileId) return;
+
         // prepare the new content
         const newContent = this.actualContentEl.nativeElement.innerHTML;
 
