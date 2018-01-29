@@ -49,6 +49,9 @@ export class EditorComponent implements OnInit {
                 this.originalContent = res['data']['content'] == '' ? '&nbsp;' : res['data']['content'];
                 this.actualContent = this.originalContent;
                 this.changesMade = false;
+
+                // set the focus
+                this.actualContentEl.nativeElement.focus();
             }
         });
     }

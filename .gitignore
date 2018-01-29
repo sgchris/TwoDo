@@ -6,6 +6,9 @@
 /tmp
 /out-tsc
 
+# Database files
+*.db
+
 # dependencies
 /node_modules
 
@@ -42,5 +45,3 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Database files
-*.db
