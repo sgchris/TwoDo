@@ -1,9 +1,37 @@
+.card-body {
+    padding: 0.5rem;
+}
+
 .file-wrapper {
     width: 10rem;
     margin:0 10px 10px 0;
     cursor: pointer;
 }
 
+.delete-file-button {
+    color: #C11;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.delete-file-button:hover {
+    text-decoration: none;
+    background: #C11;
+    color: #FFF;
+}
+
 .selected-file {
     background: #DEF;
+}
+
+p.file-name {
+    height: 3em;
+    line-height: 1.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+}
+
+div.rename-file-wrapper {
+    height: 3rem;
 }

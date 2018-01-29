@@ -9,7 +9,6 @@ import * as Config from '../config';
 })
 export class EditorComponent implements OnInit {
     // elements bindings
-    @ViewChild('editFilenameEl') inputFilenameEl:ElementRef;
     @ViewChild('actualContentEl') actualContentEl:ElementRef;
 
     // inputs
@@ -27,12 +26,15 @@ export class EditorComponent implements OnInit {
     ngOnInit() { }
 
     ngOnChanges(changes) {
-        console.log('changes', changes);
         this.loadFile();
     }
 
-    setFocus(el) {
-        setTimeout(() => {el.focus();});
+    contentKeyPress(evt) {
+        // Ctrl-S
+        if (evt.ctrlKey && evt.key == 's') {
+            evt.preventDefault();
+            this.saveFile();
+        }
     }
 
     loadFile() {
@@ -43,33 +45,16 @@ export class EditorComponent implements OnInit {
         let params = new HttpParams().set('file_id', this.fileId);
         this.http.get(Config.API_BASE_URL + 'get_file_data.php', {params: params}).subscribe(res => {
             if (res['result'] == 'ok') {
-                console.log('setting new data', res);
                 this.filename = res['data']['name'];
-                this.originalContent = res['data']['content'];
+                this.originalContent = res['data']['content'] == '' ? '&nbsp;' : res['data']['content'];
                 this.actualContent = this.originalContent;
                 this.changesMade = false;
             }
         });
     }
 
-    editFilename() {
-        // open the editor
-        this.editFilenameInProgress = true;
-
-        // set focus on the edit file name element
-        this.setFocus(this.inputFilenameEl.nativeElement);
-    }
-
-    updateFilename() {
-        // close the editor
-        this.editFilenameInProgress = false
-
-        // set focus on the editable area
-        this.setFocus(this.actualContentEl.nativeElement);
-    }
-
     saveFile() {
-        if (!this.fileId) return;
+        if (!this.fileId || !this.changesMade) return;
 
         // prepare the new content
         const newContent = this.actualContentEl.nativeElement.innerHTML;
@@ -87,6 +72,7 @@ export class EditorComponent implements OnInit {
         this.http.post(requestUrl, requestParams.toString(), requestOptions).subscribe(res => {
             if (res['result'] == 'ok') {
                 this.originalContent = newContent;
+                this.changesMade = false;
             }
         });
     }

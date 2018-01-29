@@ -8,12 +8,29 @@
     </div>
     <div class="card-text alert bg-light border">
         <div class="card file-wrapper float-left"
-            [ngClass]="{'selected-file': (selectedFileId == file.id)}"
-            *ngFor="let file of files"
-            (click)="openFile(file.id)">
-            <img class="card-img-top" src="assets/images/file.png" alt="{{file.name}}" />
+                [ngClass]="{'selected-file': (selectedFileId == file.id)}"
+                *ngFor="let file of files">
+            <button type="button" title="Delete the file" class="btn btn-link btn-sm delete-file-button" (click)="deleteFile(file.id);">&times;</button>
+            <img (click)="openFile(file.id)" class="card-img-top" src="assets/images/file.png" alt="{{file.name}}" />
             <div class="card-body">
-                <p class="card-text" title="{{file.name}}">{{file.name}}</p>
+                <p [hidden]="fileId_renameInProcess == file.id"
+                        (dblclick)="fileId_renameInProcess = file.id; newFilename = file.name;"
+                        class="card-text file-name" title="{{file.name}}">{{file.name}}</p>
+
+                <!-- rename file name form -->
+                <div [hidden]="fileId_renameInProcess != file.id" class="card-text rename-file-wrapper" title="Rename the file">
+                    <form class="form-inline" (submit)="$event.preventDefault(); renameFile();">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control"
+                                [value]="file.name" (input)="newFilename = $event.target.value" />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">V</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /rename -->
+
             </div>
         </div>
     </div>

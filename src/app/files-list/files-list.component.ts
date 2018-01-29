@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import * as Globals from '../config';
@@ -13,6 +13,9 @@ export class FilesListComponent implements OnInit {
 
     files = [];
     selectedFileId = false;
+
+    fileId_renameInProcess = false;
+    newFilename = false;
 
     constructor(
         private http: HttpClient,
@@ -38,6 +41,9 @@ export class FilesListComponent implements OnInit {
     ngOnInit() { }
 
     openFile(fileId) {
+        // close renaming form (if open)
+        this.fileId_renameInProcess = false;
+
         // store the selected file locally
         this.selectedFileId = fileId;
 
@@ -54,7 +60,50 @@ export class FilesListComponent implements OnInit {
                 headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
             }).subscribe(res => {
                 this.loadFilesList();
-            })
+            });
+    }
+
+    // rename a file, and reload the list
+    renameFile() {
+        if (!this.newFilename || !this.fileId_renameInProcess) {
+            return false;
+        }
+
+        const params = new HttpParams()
+            .set('file_id', String(this.fileId_renameInProcess))
+            .set('name', String(this.newFilename));
+
+        this.http.post(Globals.API_BASE_URL + 'update_file.php', params.toString(), {
+            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+        }).subscribe(res => {
+            if (res['result'] == 'ok') {
+                this.fileId_renameInProcess = false;
+                this.loadFilesList();
+            }
+        });
+    }
+
+    deleteFile(fileId) {
+        if (!fileId || !confirm('Delete the file?')) return;
+
+        const params = new HttpParams()
+            .set('file_id', String(fileId));
+
+        this.http.post(Globals.API_BASE_URL + 'delete_file.php', params.toString(), {
+            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+        }).subscribe(res => {
+            if (res['result'] == 'ok') {
+                let promise = this.loadFilesList();
+
+                promise.subscribe(res => {
+                    if (res['result'] == 'ok') {
+                        if (res['files'].length > 0) {
+                            this.openFile(res['files'][0]['id']);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     loadFilesList() {
