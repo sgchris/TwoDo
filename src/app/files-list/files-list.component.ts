@@ -21,11 +21,11 @@ export class FilesListComponent implements OnInit {
         private http: HttpClient,
         private cookieService: CookieService
     ) {
-        let promise = this.loadFilesList();
+        let loadFilesPromise = this.loadFilesList();
 
         // get the store file id
         let storedSelectedFileId = this.cookieService.get('twodo_selected_file_id');
-        promise.subscribe(res => {
+        loadFilesPromise.subscribe(res => {
             // if wasn't stored before, take the first file
             if (!storedSelectedFileId) {
                 storedSelectedFileId = res['files'] && res['files'].length > 0 ? res['files'][0]['id'] : false;
@@ -47,6 +47,7 @@ export class FilesListComponent implements OnInit {
         // store the selected file locally
         this.selectedFileId = fileId;
 
+        // store in a cookie
         const expiresInDays = 365;
         this.cookieService.set('twodo_selected_file_id', fileId, expiresInDays);
 
@@ -107,15 +108,15 @@ export class FilesListComponent implements OnInit {
     }
 
     loadFilesList() {
-        var promise = this.http.get(Globals.API_BASE_URL + 'get_files.php');
+        var loadFilesPromise = this.http.get(Globals.API_BASE_URL + 'get_files.php');
 
-        promise.subscribe(res => {
+        loadFilesPromise.subscribe(res => {
             if (res['result'] == 'ok') {
                 this.files = res['files'];
             }
         });
 
-        return promise;
+        return loadFilesPromise;
     }
 
 }
