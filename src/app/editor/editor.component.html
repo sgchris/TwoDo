@@ -2,13 +2,20 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">
-            <button type="button" [disabled]="!changesMade" (click)="saveFile()" class="btn btn-primary btn-sm float-right" title="Save changes">Save changes</button>
-            <span title="{{filename}}">{{filename}}</span>
+            <button type="button"
+                [disabled]="!changesMade"
+                (click)="saveFile()"
+                class="btn btn-primary btn-sm float-right"
+                title="Save changes">Save changes</button>
+            <span *ngIf="filesService.currentFileData"
+                title="{{filesService.currentFileData.name}}">{{filesService.currentFileData.name}}</span>
         </h5>
     </div>
-    <div #actualContentEl class="card-text alert bg-light border"
+    <div #actualContentEl
+        *ngIf="filesService.currentFileData"
+        class="card-text alert bg-light border"
         (window:keydown)="contentKeyPress($event)"
         contenteditable="true"
-        [innerHTML]="actualContent"
+        [innerHTML]="filesService.currentFileData.content"
         (input)="changesMade = true"></div>
 </div>

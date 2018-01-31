@@ -11,7 +11,7 @@ $params = receiveParams(
 
 // get latest version
 $data = dbRow('
-	SELECT f.name, fv.content, fv.date_created
+	SELECT f.id, f.name, fv.content, fv.date_created
 	FROM files f
 		LEFT JOIN files_versions fv ON fv.file_id = f.id
 	WHERE f.id = :file_id
