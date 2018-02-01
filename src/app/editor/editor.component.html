@@ -16,6 +16,7 @@
         class="card-text alert bg-light border"
         (window:keydown)="contentKeyPress($event)"
         contenteditable="true"
+        [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
         [innerHTML]="filesService.currentFileData.content"
         (input)="changesMade = true"></div>
 </div>

@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { ConfigService } from './config.service';
 import * as Config from './config';
 
 @Injectable()
@@ -16,7 +17,8 @@ export class FilesService {
 
     constructor(
         private http: HttpClient,
-        private cookieService: CookieService
+        private cookieService: CookieService,
+        private configService: ConfigService
     ) {
         // load files upon creation
         let loadFilesPromise = this.loadFilesList();
@@ -38,7 +40,7 @@ export class FilesService {
 
     loadFileData(fileId) {
         let params = new HttpParams().set('file_id', fileId);
-        let getFileDataPromise = this.http.get(Config.API_BASE_URL + 'get_file_data.php', { params: params });
+        let getFileDataPromise = this.http.get(this.configService.API_BASE_URL + 'get_file_data.php', { params: params });
 
         getFileDataPromise.subscribe(res => {
             if (res['result'] == 'ok') {
@@ -54,7 +56,7 @@ export class FilesService {
 
     // load all files from the server
     loadFilesList() {
-        var loadFilesPromise = this.http.get(Config.API_BASE_URL + 'get_files.php');
+        var loadFilesPromise = this.http.get(this.configService.API_BASE_URL + 'get_files.php');
 
         loadFilesPromise.subscribe(res => {
             if (res['result'] == 'ok') {
@@ -87,7 +89,7 @@ export class FilesService {
         }
 
         // prepare request parameters
-        const requestUrl = Config.API_BASE_URL + 'add_file_version.php';
+        const requestUrl = this.configService.API_BASE_URL + 'add_file_version.php';
         const requestParams = new HttpParams()
             .set('file_id', this.currentFileData.id)
             .set('content', newContent);
@@ -101,7 +103,7 @@ export class FilesService {
     }
 
     updateFileName(fileId, newFileName) {
-        const url = Config.API_BASE_URL + 'update_file.php';
+        const url = this.configService.API_BASE_URL + 'update_file.php';
 
         const params = new HttpParams()
             .set('file_id', String(fileId))
@@ -139,7 +141,7 @@ export class FilesService {
 
     // create new file
     createFile(newFileName) {
-        const url = Config.API_BASE_URL + 'add_file.php';
+        const url = this.configService.API_BASE_URL + 'add_file.php';
         const params = new HttpParams().set('name', newFileName);
         const headers = {
             headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
@@ -158,7 +160,7 @@ export class FilesService {
     }
 
     deleteFile(fileId) {
-        const url = Config.API_BASE_URL + 'delete_file.php';
+        const url = this.configService.API_BASE_URL + 'delete_file.php';
         const params = new HttpParams().set('file_id', String(fileId));
         const headers = {
             headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),

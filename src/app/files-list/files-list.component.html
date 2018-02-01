@@ -6,7 +6,7 @@
             files list
         </h5>
     </div>
-    <div class="card-text alert bg-light border">
+    <div class="card-text alert bg-light border" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}">
         <div class="card file-wrapper float-left"
                 [ngClass]="{'selected-file': (selectedFileId == file.id)}"
                 *ngFor="let file of filesService.files">

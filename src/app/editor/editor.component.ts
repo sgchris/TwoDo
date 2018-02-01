@@ -1,7 +1,8 @@
 import { Component, OnInit, Renderer, ViewChild, Input, ElementRef } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { FilesService } from '../files.service';
-import * as Config from '../config';
+import { ConfigService } from '../config.service';
+
 
 @Component({
     selector: 'app-editor',
@@ -22,7 +23,8 @@ export class EditorComponent implements OnInit {
 
     constructor(
         private http: HttpClient,
-        private filesService: FilesService
+        private filesService: FilesService,
+        private configService: ConfigService
     ) {
 
     }

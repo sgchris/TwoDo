@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FilesService } from '../files.service';
-import * as Globals from '../config';
+import { ConfigService } from '../config.service';
 
 @Component({
     selector: 'app-files-list',
@@ -21,7 +21,8 @@ export class FilesListComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private cookieService: CookieService,
-        private filesService: FilesService
+        private filesService: FilesService,
+        private configService: ConfigService
     ) {
 
     }
