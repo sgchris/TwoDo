@@ -1,15 +1,36 @@
 <br  />
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">
+        <h4 class="card-title">
+            <!-- buttons -->
+            <!-- save -->
             <button type="button"
                 [disabled]="!changesMade"
                 (click)="saveFile()"
                 class="btn btn-primary btn-sm float-right"
                 title="Save changes">Save changes</button>
+
+            <!-- Previous version -->
+            <button type="button"
+                [disabled]="filesService.currentFileData.total_versions > 1 && filesService.currentFileData.currentVersion > 0"
+                (click)="loadPrevVersion()"
+                class="btn btn-secondary btn-sm float-right"
+                title="Go one version back">Prev version</button>
+
+            <!-- Next version -->
+            <button type="button"
+                [disabled]="filesService.currentFileData.total_versions > 1 && filesService.currentFileData.currentVersion != filesService.currentFileData.total_versions"
+                (click)="loadNextVersion()"
+                class="btn btn-secondary btn-sm float-right"
+                title="Go one version forward">Next version</button>
+
+            <small *ngIf="filesService.currentFileData.total_versions > 1" class="float-right" title="This file has {{filesService.currentFileData.total_versions}} versions saved">
+                verion {{filesService.currentFileData.currentVersion}}The file has {{filesService.currentFileData.total_versions}} versions
+            </small>
+            <!-- the name of the file -->
             <span *ngIf="filesService.currentFileData"
                 title="{{filesService.currentFileData.name}}">{{filesService.currentFileData.name}}</span>
-        </h5>
+        </h4>
     </div>
     <div #actualContentEl
         *ngIf="filesService.currentFileData"

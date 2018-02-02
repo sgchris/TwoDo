@@ -33,13 +33,21 @@ export class FilesService {
 
             // load file data
             if (currentFileId) {
+                console.log('from the constructor');
                 this.loadFileData(currentFileId);
             }
         });
     }
 
-    loadFileData(fileId) {
+    loadFileData(fileId, versionId = undefined) {
+        // prepare the params
         let params = new HttpParams().set('file_id', fileId);
+
+        // add optional version id parameter
+        if (versionId) {
+            params.set('version_id', versionId);
+        }
+        // perform the request
         let getFileDataPromise = this.http.get(this.configService.API_BASE_URL + 'get_file_data.php', { params: params });
 
         getFileDataPromise.subscribe(res => {

@@ -48,6 +48,14 @@ export class EditorComponent implements OnInit {
         }
     }
 
+    loadPrevVersion() {
+        //this.filesService.loadFileData(this.filesService.currentFileData.id)
+    }
+
+    loadNextVersion() {
+        //this.filesService.loadFileData(this.filesService.currentFileData.id)
+    }
+
     saveFile() {
         if (!this.changesMade) return;
 

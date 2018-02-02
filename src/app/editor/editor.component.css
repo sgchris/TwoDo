@@ -1,3 +1,10 @@
+h4 {
+    margin-bottom: 0;
+}
+.card-title button {
+    margin-left: 5px;
+}
+
 .card-body {
     padding: 0.5rem;
 }
