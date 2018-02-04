@@ -12,3 +12,9 @@ h4 {
 .card-text {
     overflow: auto;
 }
+
+.versions-pager {
+    font-size: 0.6em;
+    line-height: 2em;
+    color: #AAA;
+}

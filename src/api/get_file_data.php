@@ -44,9 +44,5 @@ if ($totalVersions === false) {
 }
 $data['total_versions'] = $totalVersions['total_versions'];
 
-
-// fix the data
-if (!$data['content']) $data['content'] = '';
-if (!$data['date_created']) $data['date_created'] = '';
-
-_success(['data' => $data]);
+$versionsList = dbQuery('select id, date_created from files_versions order by date_created desc');
+_success(['data' => $data, 'versions' => $versionsList]);

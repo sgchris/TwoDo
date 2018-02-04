@@ -40,6 +40,7 @@ export class EditorComponent implements OnInit {
         });
     }
 
+    // bind Ctrl-S as save
     contentKeyPress(evt) {
         // Ctrl-S
         if (evt.ctrlKey && evt.key == 's') {

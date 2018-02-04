@@ -24,8 +24,8 @@
                 class="btn btn-secondary btn-sm float-right"
                 title="Go one version forward">Next version</button>
 
-            <small *ngIf="filesService.currentFileData.total_versions > 1" class="float-right" title="This file has {{filesService.currentFileData.total_versions}} versions saved">
-                verion {{filesService.currentFileData.currentVersion}}The file has {{filesService.currentFileData.total_versions}} versions
+            <small *ngIf="filesService.currentFileData.total_versions > 1" class="float-right versions-pager" title="This file has {{filesService.currentFileData.total_versions}} versions saved">
+                verion {{filesService.currentFileData.currentVersion}} of {{filesService.currentFileData.total_versions}} versions
             </small>
             <!-- the name of the file -->
             <span *ngIf="filesService.currentFileData"

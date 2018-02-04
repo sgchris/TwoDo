@@ -2,7 +2,6 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './config.service';
-import * as Config from './config';
 
 @Injectable()
 export class FilesService {

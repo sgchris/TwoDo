@@ -10,7 +10,7 @@ $params = receiveParams(
 $data = dbRow('
 	SELECT id
 	FROM files
-	WHERE name like :name
+	WHERE name LIKE :name
 	LIMIT 1',
 	['name' => $params['name']]
 );
@@ -18,7 +18,10 @@ if ($data) {
 	_exit('file already exists');
 }
 
-$res = dbExec('insert into files (name) values (:name)', ['name' => $params['name']]);
+$res = dbExec('INSERT INTO files (name, date_created) VALUES (:name, :date_created)', [
+	'name' => $params['name'],
+	'date_created' => time(),
+]);
 if (!$res) {
 	_exit('cannot create file');
 }
