@@ -12,32 +12,34 @@
 
             <!-- Previous version -->
             <button type="button"
-                [disabled]="filesService.currentFileData.total_versions > 1 && filesService.currentFileData.currentVersion > 0"
+                *ngIf="filesService.currentFile"
+                [disabled]="currentVersion == 0"
                 (click)="loadPrevVersion()"
                 class="btn btn-secondary btn-sm float-right"
                 title="Go one version back">Prev version</button>
 
             <!-- Next version -->
             <button type="button"
-                [disabled]="filesService.currentFileData.total_versions > 1 && filesService.currentFileData.currentVersion != filesService.currentFileData.total_versions"
+                *ngIf="filesService.currentFile"
+                [disabled]="currentVersion >= filesService.currentFile.data.total_versions - 1"
                 (click)="loadNextVersion()"
                 class="btn btn-secondary btn-sm float-right"
                 title="Go one version forward">Next version</button>
 
-            <small *ngIf="filesService.currentFileData.total_versions > 1" class="float-right versions-pager" title="This file has {{filesService.currentFileData.total_versions}} versions saved">
-                verion {{filesService.currentFileData.currentVersion}} of {{filesService.currentFileData.total_versions}} versions
+            <small *ngIf="filesService.currentFile && currentVersion < filesService.currentFile.data.total_versions - 1" class="float-right versions-pager" title="This file has {{filesService.currentFile.data.total_versions}} versions saved">
+                version {{currentVersion + 1}} of {{filesService.currentFile.data.total_versions}} versions
             </small>
             <!-- the name of the file -->
-            <span *ngIf="filesService.currentFileData"
-                title="{{filesService.currentFileData.name}}">{{filesService.currentFileData.name}}</span>
+            <span *ngIf="filesService.currentFile"
+                title="{{filesService.currentFile.data.name}}">{{filesService.currentFile.data.name}}</span>
         </h4>
     </div>
     <div #actualContentEl
-        *ngIf="filesService.currentFileData"
+        *ngIf="filesService.currentFile"
         class="card-text alert bg-light border"
         (window:keydown)="contentKeyPress($event)"
         contenteditable="true"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
-        [innerHTML]="filesService.currentFileData.content"
+        [innerHTML]="filesService.currentFile.data.content"
         (input)="changesMade = true"></div>
 </div>

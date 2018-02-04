@@ -18,6 +18,7 @@ export class EditorComponent implements OnInit {
 
     // local vars
     filename = 'Unnamed'
+    currentVersion = null;
     editFilenameInProgress = false
     changesMade = false;
 
@@ -30,8 +31,13 @@ export class EditorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.filesService.currentFileUpdateEvent.subscribe(selectedFileData => {
+        this.filesService.currentFileUpdateEvent.subscribe(selectedFile => {
+            console.log('ngOnInit selectedFile', selectedFile);
             this.changesMade = false;
+
+            if (this.currentVersion === null) {
+                this.currentVersion = Number(selectedFile.data.total_versions) - 1;
+            }
 
             // set the focus
             if (this.actualContentEl) {
@@ -50,11 +56,23 @@ export class EditorComponent implements OnInit {
     }
 
     loadPrevVersion() {
-        //this.filesService.loadFileData(this.filesService.currentFileData.id)
+        if (--this.currentVersion < 0) {
+            this.currentVersion = 0;
+        }
+
+        const fileId = this.filesService.currentFile.data.id;
+        const prevVersionId = this.filesService.currentFile.versions[this.currentVersion].id;
+        this.filesService.loadFileData(fileId, prevVersionId);
     }
 
     loadNextVersion() {
-        //this.filesService.loadFileData(this.filesService.currentFileData.id)
+        if (++this.currentVersion >= this.filesService.currentFile.data.total_versions) {
+            this.currentVersion = this.filesService.currentFile.data.total_versions - 1;
+        }
+
+        const fileId = this.filesService.currentFile.data.id;
+        const prevVersionId = this.filesService.currentFile.versions[this.currentVersion].id;
+        this.filesService.loadFileData(fileId, prevVersionId);
     }
 
     saveFile() {
@@ -66,6 +84,7 @@ export class EditorComponent implements OnInit {
         this.filesService.updateFileContent(newContent).subscribe(res => {
             if (res['result'] == 'ok') {
                 this.changesMade = false;
+                this.currentVersion = this.filesService.currentFile.data.total_versions + 1;
             }
         });
 

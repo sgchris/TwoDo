@@ -36,7 +36,7 @@ if (!$data) {
 	_exit('File not found');
 }
 
-$totalVersions = dbRow('select count(1) as total_versions from files_versions where file_id = :file_id', [
+$totalVersions = dbRow('SELECT COUNT(1) AS total_versions FROM files_versions WHERE file_id = :file_id', [
 	'file_id' => $params['file_id']
 ]);
 if ($totalVersions === false) {
@@ -44,5 +44,15 @@ if ($totalVersions === false) {
 }
 $data['total_versions'] = $totalVersions['total_versions'];
 
-$versionsList = dbQuery('select id, date_created from files_versions order by date_created desc');
+// get versions list from the first (index:0) to the last (index:len-1)
+$versionsList = dbQuery('
+	SELECT id, date_created
+	FROM files_versions
+	WHERE file_id = :file_id
+	ORDER BY date_created DESC
+	LIMIT 50', [
+		'file_id' => $params['file_id'],
+	]
+);
+
 _success(['data' => $data, 'versions' => $versionsList]);

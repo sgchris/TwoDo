@@ -9,7 +9,7 @@ export class FilesService {
 
     // all the files are stored here
     files = [];
-    currentFileData;
+    currentFile;
 
     // event is emitted upon current file change
     currentFileUpdateEvent: EventEmitter<any> = new EventEmitter();
@@ -22,7 +22,7 @@ export class FilesService {
         // load files upon creation
         let loadFilesPromise = this.loadFilesList();
 
-        // get the store file id
+        // get the stored file id
         let currentFileId = this.cookieService.get(this.cookieName);
         loadFilesPromise.subscribe(res => {
             // if wasn't stored before, take the first file
@@ -32,7 +32,6 @@ export class FilesService {
 
             // load file data
             if (currentFileId) {
-                console.log('from the constructor');
                 this.loadFileData(currentFileId);
             }
         });
@@ -40,21 +39,29 @@ export class FilesService {
 
     loadFileData(fileId, versionId = undefined) {
         // prepare the params
-        let params = new HttpParams().set('file_id', fileId);
+        //let params = new HttpParams().set('file_id', fileId);
+        let params = {
+            'file_id': fileId
+        };
 
         // add optional version id parameter
-        if (versionId) {
-            params.set('version_id', versionId);
+        if (versionId != undefined) {
+            //params.set('version_id', versionId);
+            params['version_id'] = versionId;
         }
         // perform the request
-        let getFileDataPromise = this.http.get(this.configService.API_BASE_URL + 'get_file_data.php', { params: params });
+        let getFileDataPromise = this.http.get(this.configService.API_BASE_URL + 'get_file_data.php', { params });
 
         getFileDataPromise.subscribe(res => {
             if (res['result'] == 'ok') {
-                this.currentFileData = res['data'];
+                this.currentFile = {
+                    'data': res['data'],
+                    'versions': res['versions'],
+                    'version': 0
+                };
 
                 // broadcast the change
-                this.currentFileUpdateEvent.emit(this.currentFileData);
+                this.currentFileUpdateEvent.emit(this.currentFile);
             }
         });
 
@@ -84,29 +91,33 @@ export class FilesService {
             }
 
             if (res['result'] != 'ok' || fileId == 0) {
-                this.currentFileData = null;
+                this.currentFile = null;
             }
         });
     }
 
     // update current file content
     updateFileContent(newContent) {
-        if (!this.currentFileData) {
+        if (!this.currentFile) {
             return;
         }
 
         // prepare request parameters
         const requestUrl = this.configService.API_BASE_URL + 'add_file_version.php';
         const requestParams = new HttpParams()
-            .set('file_id', this.currentFileData.id)
+            .set('file_id', this.currentFile.data.id)
             .set('content', newContent);
         const requestOptions = {
             headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
         };
 
         // perform the request
-        return this.http.post(requestUrl, requestParams.toString(), requestOptions);
+        let requestPromise = this.http.post(requestUrl, requestParams.toString(), requestOptions);
+        requestPromise.toPromise().then(_ => {
+            console.log('updateFileContent', _);
+        });
 
+        return requestPromise;
     }
 
     updateFileName(fileId, newFileName) {
@@ -134,11 +145,11 @@ export class FilesService {
                 }
 
                 // update current file data, if this is it
-                if (this.currentFileData.id == fileId) {
-                    this.currentFileData.name = newFileName;
+                if (this.currentFile.data.id == fileId) {
+                    this.currentFile.data.name = newFileName;
 
                     // broadcast the change
-                    this.currentFileUpdateEvent.emit(this.currentFileData);
+                    this.currentFileUpdateEvent.emit(this.currentFile);
                 }
             }
         });
@@ -188,7 +199,7 @@ export class FilesService {
                 }
 
                 // check if current file deleted
-                if (this.currentFileData.id == fileId) {
+                if (this.currentFile.data.id == fileId) {
                     if (theFileIndex > 0) {
                         // load one file before
                         this.setCurrentFileId(this.files[theFileIndex-1].id);

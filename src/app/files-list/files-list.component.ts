@@ -28,8 +28,8 @@ export class FilesListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.filesService.currentFileUpdateEvent.subscribe(selectedFileData => {
-            this.selectedFileId = selectedFileData.id;
+        this.filesService.currentFileUpdateEvent.subscribe(selectedFile => {
+            this.selectedFileId = selectedFile.data.id;
         });
     }
 
