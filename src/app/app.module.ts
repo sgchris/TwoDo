@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
 import { FilesListComponent } from './files-list/files-list.component';
 
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+
 
 @NgModule({
     declarations: [
@@ -18,7 +20,8 @@ import { FilesListComponent } from './files-list/files-list.component';
     ],
     imports: [
         BrowserModule,
-        HttpClientModule
+        HttpClientModule,
+        AngularFontAwesomeModule
     ],
     providers: [
         CookieService,

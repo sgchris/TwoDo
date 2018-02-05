@@ -24,7 +24,7 @@ export class FilesService {
 
         // get the stored file id
         let currentFileId = this.cookieService.get(this.cookieName);
-        loadFilesPromise.subscribe(res => {
+        loadFilesPromise.then(res => {
             // if wasn't stored before, take the first file
             if (!currentFileId) {
                 currentFileId = res['files'] && res['files'].length > 0 ? res['files'][0]['id'] : false;
@@ -37,9 +37,15 @@ export class FilesService {
         });
     }
 
-    loadFileData(fileId, versionId = undefined) {
+    loadFileData(fileId = undefined, versionId = undefined) {
         // prepare the params
-        //let params = new HttpParams().set('file_id', fileId);
+        if (fileId == undefined) {
+            if (this.currentFile && this.currentFile.data.id) {
+                fileId = this.currentFile.data.id;
+            } else {
+                return;
+            }
+        }
         let params = {
             'file_id': fileId
         };
@@ -50,9 +56,9 @@ export class FilesService {
             params['version_id'] = versionId;
         }
         // perform the request
-        let getFileDataPromise = this.http.get(this.configService.API_BASE_URL + 'get_file_data.php', { params });
+        let getFileDataPromise = this.http.get(this.configService.API_BASE_URL + 'get_file_data.php', { params }).toPromise();
 
-        getFileDataPromise.subscribe(res => {
+        getFileDataPromise.then(res => {
             if (res['result'] == 'ok') {
                 this.currentFile = {
                     'data': res['data'],
@@ -70,9 +76,9 @@ export class FilesService {
 
     // load all files from the server
     loadFilesList() {
-        var loadFilesPromise = this.http.get(this.configService.API_BASE_URL + 'get_files.php');
+        var loadFilesPromise = this.http.get(this.configService.API_BASE_URL + 'get_files.php').toPromise();
 
-        loadFilesPromise.subscribe(res => {
+        loadFilesPromise.then(res => {
             if (res['result'] == 'ok') {
                 this.files = res['files'];
             }
@@ -83,7 +89,7 @@ export class FilesService {
 
     setCurrentFileId(fileId) {
         let loadFileDataPromise = this.loadFileData(fileId);
-        loadFileDataPromise.subscribe(res => {
+        loadFileDataPromise.then(res => {
             if (res['result'] == 'ok') {
                 // store the selection in the cookie
                 const expiresInDays = 365;
@@ -112,11 +118,7 @@ export class FilesService {
         };
 
         // perform the request
-        let requestPromise = this.http.post(requestUrl, requestParams.toString(), requestOptions);
-        requestPromise.toPromise().then(_ => {
-            console.log('updateFileContent', _);
-        });
-
+        let requestPromise = this.http.post(requestUrl, requestParams.toString(), requestOptions).toPromise();
         return requestPromise;
     }
 
@@ -132,10 +134,10 @@ export class FilesService {
         };
 
         // make the call
-        let renameFilePromise = this.http.post(url, params.toString(), headers);
+        let renameFilePromise = this.http.post(url, params.toString(), headers).toPromise();
 
         // update local data
-        renameFilePromise.subscribe(res => {
+        renameFilePromise.then(res => {
             if (res['result'] == 'ok') {
                 // update local data
                 for (let i in this.files) {
@@ -166,7 +168,8 @@ export class FilesService {
         };
 
         // send the request
-        this.http.post(url, params.toString(), headers).subscribe(res => {
+        let addFilePromise = this.http.post(url, params.toString(), headers).toPromise();
+        addFilePromise.then(res => {
             if (res['result'] == 'ok') {
                 // add the new file to the list
                 this.files.push({
@@ -175,6 +178,8 @@ export class FilesService {
                 });
             }
         });
+
+        return addFilePromise;
     }
 
     deleteFile(fileId) {
@@ -185,7 +190,8 @@ export class FilesService {
         };
 
         // send the request
-        this.http.post(url, params.toString(), headers).subscribe(res => {
+        let deleteFilePromise = this.http.post(url, params.toString(), headers).toPromise();
+        deleteFilePromise.then(res => {
             if (res['result'] == 'ok') {
 
                 // remove the file from the local list
@@ -202,7 +208,7 @@ export class FilesService {
                 if (this.currentFile.data.id == fileId) {
                     if (theFileIndex > 0) {
                         // load one file before
-                        this.setCurrentFileId(this.files[theFileIndex-1].id);
+                        this.setCurrentFileId(this.files[theFileIndex - 1].id);
                     } else if (this.files.length > 0) {
                         // load the first file
                         this.setCurrentFileId(this.files[0].id);
@@ -213,6 +219,8 @@ export class FilesService {
                 }
             }
         });
+
+        return deleteFilePromise;
     }
 
 }

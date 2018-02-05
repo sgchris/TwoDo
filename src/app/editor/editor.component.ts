@@ -1,5 +1,4 @@
 import { Component, OnInit, Renderer, ViewChild, Input, ElementRef } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { FilesService } from '../files.service';
 import { ConfigService } from '../config.service';
 
@@ -18,21 +17,21 @@ export class EditorComponent implements OnInit {
 
     // local vars
     filename = 'Unnamed'
-    currentVersion = null;
+
+    // 0 - latest, N - N versions back
+    currentVersion = 0;
     editFilenameInProgress = false
     changesMade = false;
 
     constructor(
-        private http: HttpClient,
-        private filesService: FilesService,
-        private configService: ConfigService
+        private configService: ConfigService,
+        private filesService: FilesService
     ) {
 
     }
 
     ngOnInit() {
         this.filesService.currentFileUpdateEvent.subscribe(selectedFile => {
-            console.log('ngOnInit selectedFile', selectedFile);
             this.changesMade = false;
 
             if (this.currentVersion === null) {
@@ -55,24 +54,35 @@ export class EditorComponent implements OnInit {
         }
     }
 
-    loadPrevVersion() {
-        if (--this.currentVersion < 0) {
-            this.currentVersion = 0;
-        }
-
+    _loadFileAtCurrentVersion() {
         const fileId = this.filesService.currentFile.data.id;
         const prevVersionId = this.filesService.currentFile.versions[this.currentVersion].id;
         this.filesService.loadFileData(fileId, prevVersionId);
     }
 
-    loadNextVersion() {
-        if (++this.currentVersion >= this.filesService.currentFile.data.total_versions) {
+    loadPrevVersion() {
+        if (this.changesMade && !confirm('Changes made, discard?')) {
+            return;
+        }
+
+        // check if reached the first version
+        if (++this.currentVersion > this.filesService.currentFile.data.total_versions - 1) {
             this.currentVersion = this.filesService.currentFile.data.total_versions - 1;
         }
 
-        const fileId = this.filesService.currentFile.data.id;
-        const prevVersionId = this.filesService.currentFile.versions[this.currentVersion].id;
-        this.filesService.loadFileData(fileId, prevVersionId);
+        this._loadFileAtCurrentVersion();
+    }
+
+    loadNextVersion() {
+        if (this.changesMade && !confirm('Changes made, discard?')) {
+            return;
+        }
+
+        if (--this.currentVersion <= 0) {
+            this.currentVersion = 0;
+        }
+
+        this._loadFileAtCurrentVersion();
     }
 
     saveFile() {
@@ -81,10 +91,12 @@ export class EditorComponent implements OnInit {
         // prepare the new content
         const newContent = this.actualContentEl.nativeElement.innerHTML;
 
-        this.filesService.updateFileContent(newContent).subscribe(res => {
+        this.filesService.updateFileContent(newContent).then(res => {
             if (res['result'] == 'ok') {
                 this.changesMade = false;
-                this.currentVersion = this.filesService.currentFile.data.total_versions + 1;
+                this.currentVersion = 0;
+
+                this.filesService.loadFileData();
             }
         });
 

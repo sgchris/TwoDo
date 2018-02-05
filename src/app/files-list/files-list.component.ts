@@ -53,8 +53,7 @@ export class FilesListComponent implements OnInit {
             return false;
         }
 
-        let renameFilePromise = this.filesService.updateFileName(this.fileId_renameInProcess, this.newFilename);
-        renameFilePromise.subscribe(res => {
+        this.filesService.updateFileName(this.fileId_renameInProcess, this.newFilename).then(_ => {
             this.fileId_renameInProcess = false;
         });
     }
