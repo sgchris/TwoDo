@@ -10,13 +10,15 @@ import { EditorComponent } from './editor/editor.component';
 import { FilesListComponent } from './files-list/files-list.component';
 
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { PrettyFileSizePipe } from './pretty-file-size.pipe';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         EditorComponent,
-        FilesListComponent
+        FilesListComponent,
+        PrettyFileSizePipe
     ],
     imports: [
         BrowserModule,

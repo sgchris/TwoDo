@@ -8,14 +8,23 @@
                 [disabled]="!changesMade"
                 (click)="saveFile()"
                 class="btn btn-primary btn-sm float-right"
-                title="Save changes">Save changes</button>
+                title="Save changes"><i class="fa fa-save"></i> Save changes</button>
 
             <!-- Previous version -->
             <div class="dropdown float-right" *ngIf="filesService.currentFile && filesService.currentFile.data.total_versions > 1">
-                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle btn-sm"
+                    type="button" id="dropdownMenu2"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    title="Browse file versions">
                     <i class="fa fa-history"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button"
+                        *ngIf="currentVersion > 0"
+                        (click)="loadLatestVersion()"
+                        title="Go one version forward"><i class="fa fa-arrow-circle-up"></i> Load latest version</button>
                     <button class="dropdown-item" type="button"
                         *ngIf="currentVersion > 0"
                         (click)="loadNextVersion()"
@@ -37,6 +46,6 @@
                 title="{{filesService.currentFile.data.name}}">{{filesService.currentFile.data.name}}</span>
         </h4>
     </div>
-    <div #actualContentEl *ngIf="filesService.currentFile" class="card-text alert bg-light border" (window:keydown)="contentKeyPress($event)" contenteditable="true" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}" [innerHTML]="filesService.currentFile.data.content"
+    <div #actualContentEl *ngIf="filesService.currentFile" class="card-text alert border file-content-area" (window:keydown)="contentKeyPress($event)" contenteditable="true" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}" [innerHTML]="filesService.currentFile.data.content"
         (input)="changesMade = true"></div>
 </div>

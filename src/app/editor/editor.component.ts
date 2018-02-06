@@ -85,6 +85,19 @@ export class EditorComponent implements OnInit {
         this._loadFileAtCurrentVersion();
     }
 
+    loadLatestVersion() {
+        if (this.changesMade && !confirm('Changes made, discard?')) {
+            return;
+        }
+
+        // reset to the latest
+        this.currentVersion = 0;
+
+        this._loadFileAtCurrentVersion();
+    }
+
+
+
     saveFile() {
         if (!this.changesMade) return;
 

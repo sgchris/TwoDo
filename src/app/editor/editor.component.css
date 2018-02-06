@@ -18,3 +18,7 @@ h4 {
     line-height: 2em;
     color: #AAA;
 }
+
+.file-content-area {
+    background-color: #fffde0;
+}

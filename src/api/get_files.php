@@ -5,7 +5,7 @@ require_once __DIR__.'/tools/init.php';
 requestShouldBe('get');
 
 $res = $db->query('
-    SELECT f.id, f.name, LENGTH(fv.content)
+    SELECT f.id, f.name, LENGTH(fv.content) as size
     FROM files f
         LEFT JOIN files_versions fv ON fv.file_id = f.id
     GROUP BY f.id
