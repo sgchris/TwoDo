@@ -109,7 +109,7 @@ export class EditorComponent implements OnInit {
                 this.changesMade = false;
                 this.currentVersion = 0;
 
-                this.filesService.loadFileData();
+                this.filesService.loadFilesList();
             }
         });
 
