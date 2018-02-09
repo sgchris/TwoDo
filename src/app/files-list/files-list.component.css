@@ -11,14 +11,16 @@ h4 {
 }
 
 .file-wrapper {
-    width: 8rem;
+    width: 9rem;
     margin:0 10px 10px 0;
     cursor: pointer;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
 }
 .file-icon-wrapper {
     padding: 10px;
     text-align: center;
+    color: #ACE;
 }
 .delete-file-button {
     color: #C11;
@@ -43,9 +45,12 @@ p.file-name {
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 0;
+    color: #555;
+    text-align: center;
 }
 p.file-size-wraper {
     margin: 0;
+    text-align: center;
 }
 
 div.rename-file-wrapper {

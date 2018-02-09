@@ -3,7 +3,7 @@
     <div class="card-body">
         <h4 class="card-title">
             <button type="button" class="btn btn-primary btn-sm float-right" (click)="createFile();" title="Create new file"><i class="fa fa-star"></i> New</button>
-            files list
+            Files List
         </h4>
     </div>
     <div class="card-text alert bg-light border" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}">
@@ -19,10 +19,6 @@
                 <p [hidden]="fileId_renameInProcess == file.id"
                         (dblclick)="fileId_renameInProcess = file.id; newFilename = file.name;"
                         class="card-text file-name" title="{{file.name}}. Double click to rename">{{file.name}}</p>
-                <p class="file-size-wraper">
-                    <small class="text-secondary file-size">({{file.size | prettyFileSize}})</small>
-                </p>
-
                 <!-- rename file name form -->
                 <div [hidden]="fileId_renameInProcess != file.id" class="card-text rename-file-wrapper">
                     <form class="form-inline" (submit)="$event.preventDefault(); renameFile();">
@@ -33,7 +29,7 @@
                                 <button type="submit" class="btn btn-primary" title="Rename the file">
                                     <i class="fa fa-check"></i>
                                 </button>
-                                <button type="button" (click)="fileId_renameInProcess = 0;" class="btn btn-secondary" title="Cancel renaming">
+                                <button type="button" (click)="fileId_renameInProcess = 0;" class="btn btn-outline-secondary" title="Cancel renaming">
                                     <i class="fa fa-times"></i>
                                 </button>
                             </div>
@@ -44,6 +40,10 @@
                 </div>
                 <!-- /rename -->
 
+                <!-- File size -->
+                <p class="file-size-wraper">
+                    <small class="text-secondary file-size">({{file.size | prettyFileSize}})</small>
+                </p>
             </div>
         </div>
     </div>

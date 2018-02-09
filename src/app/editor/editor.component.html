@@ -43,7 +43,7 @@
             </small>
             <!-- the name of the file -->
             <span *ngIf="filesService.currentFile"
-                title="{{filesService.currentFile.data.name}}">{{filesService.currentFile.data.name}}</span>
+                title="{{filesService.currentFile.data.name}}">File Name: <strong>{{filesService.currentFile.data.name}}</strong></span>
         </h4>
     </div>
     <div #actualContentEl *ngIf="filesService.currentFile" class="card-text alert border file-content-area" (window:keydown)="contentKeyPress($event)" contenteditable="true" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}" [innerHTML]="filesService.currentFile.data.content"

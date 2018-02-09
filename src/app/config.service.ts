@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+declare var $ :any;
+
 @Injectable()
 export class ConfigService {
     // define constants
@@ -13,7 +15,8 @@ export class ConfigService {
 
     constructor() {
         this.setWindowDimensions();
-        window.addEventListener('resize', this.setWindowDimensions);
+        $(window).on('resize', callbackFn => this.setWindowDimensions())
+        //window.addEventListener('resize', this.setWindowDimensions);
     }
 
     // take the dimensions from "window"
