@@ -11,12 +11,12 @@ export class WebapiService {
     ) { }
 
     // GET requests
-    get(url, params, callbackFn) {
+    get(url, params = {}, callbackFn = undefined) {
         // prepare the URL
         const requestUrl = this.configService.API_BASE_URL + url + '.php';
 
         // make the request
-        let promise = this.http.get(requestUrl, params).toPromise();
+        let promise = this.http.get(requestUrl, { params }).toPromise();
 
         // check callback
         if (callbackFn) {
@@ -27,7 +27,7 @@ export class WebapiService {
     }
 
     // POST requests
-    post(url, params, callbackFn) {
+    post(url, params = {}, callbackFn = undefined) {
         // prepare the URL
         const requestUrl = this.configService.API_BASE_URL + url + '.php';
 

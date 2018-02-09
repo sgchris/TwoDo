@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './config.service';
+import { WebapiService } from './webapi.service';
 import { MetadataService } from './metadata.service';
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider } from "angular5-social-login";
 import { FilesService } from './files.service';
@@ -43,6 +44,7 @@ export function getAuthServiceConfigs() {
     providers: [
         CookieService,
         ConfigService,
+        WebapiService,
         MetadataService,
         FilesService,
         TwodoAuthService,

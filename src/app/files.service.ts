@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './config.service';
+import { WebapiService } from './webapi.service';
 
 @Injectable()
 export class FilesService {
@@ -17,7 +18,8 @@ export class FilesService {
     constructor(
         private http: HttpClient,
         private cookieService: CookieService,
-        private configService: ConfigService
+        private configService: ConfigService,
+        private webapi: WebapiService
     ) {
         // load files upon creation
         let loadFilesPromise = this.loadFilesList();
@@ -46,6 +48,7 @@ export class FilesService {
                 return;
             }
         }
+
         let params = {
             'file_id': fileId
         };
@@ -55,10 +58,8 @@ export class FilesService {
             //params.set('version_id', versionId);
             params['version_id'] = versionId;
         }
-        // perform the request
-        let getFileDataPromise = this.http.get(this.configService.API_BASE_URL + 'get_file_data.php', { params }).toPromise();
 
-        getFileDataPromise.then(res => {
+        return this.webapi.get('get_file_data', params, res => {
             if (res['result'] == 'ok') {
                 this.currentFile = {
                     'data': res['data'],
@@ -70,21 +71,15 @@ export class FilesService {
                 this.currentFileUpdateEvent.emit(this.currentFile);
             }
         });
-
-        return getFileDataPromise;
     }
 
     // load all files from the server
     loadFilesList() {
-        var loadFilesPromise = this.http.get(this.configService.API_BASE_URL + 'get_files.php').toPromise();
-
-        loadFilesPromise.then(res => {
+        return this.webapi.get('get_files', {}, res => {
             if (res['result'] == 'ok') {
                 this.files = res['files'];
             }
         });
-
-        return loadFilesPromise;
     }
 
     setCurrentFileId(fileId) {
