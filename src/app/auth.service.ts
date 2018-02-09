@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { AuthService as FBAuthService } from "angular4-social-login";
-import { FacebookLoginProvider } from "angular4-social-login";
+import { AuthService as FBAuthService, FacebookLoginProvider } from "angular5-social-login";
 
 @Injectable()
 export class AuthService {
@@ -22,10 +21,10 @@ export class AuthService {
     }
 
     login() {
-        this.fbAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+        return this.fbAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
     }
 
     logout() {
-        this.fbAuthService.signOut();
+        return this.fbAuthService.signOut();
     }
 }

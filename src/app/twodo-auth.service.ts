@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { AuthService } from "angular4-social-login";
-import { FacebookLoginProvider } from "angular4-social-login";
+import { AuthService } from "angular5-social-login";
+import { FacebookLoginProvider } from "angular5-social-login";
 
 @Injectable()
 export class TwodoAuthService {
@@ -12,7 +12,6 @@ export class TwodoAuthService {
 
     constructor(private fbAuthService: AuthService) {
         this.fbAuthService.authState.subscribe((user) => {
-            console.log('user', user);
             this.user = user;
             this.isLoggedIn = (user != null);
 

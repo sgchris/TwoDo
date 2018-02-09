@@ -14,6 +14,7 @@ h4 {
     width: 8rem;
     margin:0 10px 10px 0;
     cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
 .file-icon-wrapper {
     padding: 10px;

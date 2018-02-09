@@ -20,6 +20,6 @@
     <a *ngIf=" twodoAuthService.isLoggedIn"
         title="Logged in as {{twodoAuthService.user.name}}. Click to sign out"
         class="btn btn-link navbar-login-icon" (click)="logout()">
-        <img src="{{twodoAuthService.user.photoUrl}}" />
+        <img src="{{twodoAuthService.user.image}}" />
     </a>
 </nav>
