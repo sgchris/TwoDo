@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './config.service';
 import { WebapiService } from './webapi.service';
+import { TwodoAuthService } from './twodo-auth.service';
+import { MetadataService } from './metadata.service';
 
 @Injectable()
 export class FilesService {
@@ -19,13 +21,44 @@ export class FilesService {
         private http: HttpClient,
         private cookieService: CookieService,
         private configService: ConfigService,
-        private webapi: WebapiService
+        private webapi: WebapiService,
+        private authService: TwodoAuthService,
+        private metadataService: MetadataService
     ) {
+        this._loadFilesUnauthorized();
+
+        this.authService.authUpdateEvent.subscribe(user => {
+            this._loadFilesAuthorized();
+        })
+    }
+
+    // initialize the service for unauthorized users
+    // everything through localStorage
+    _loadFilesUnauthorized() {
         // load files upon creation
         let loadFilesPromise = this.loadFilesList();
 
         // get the stored file id
         let currentFileId = this.cookieService.get(this.cookieName);
+        loadFilesPromise.then(res => {
+            // if wasn't stored before, take the first file
+            if (!currentFileId) {
+                currentFileId = res['files'] && res['files'].length > 0 ? res['files'][0]['id'] : false;
+            }
+
+            // load file data
+            if (currentFileId) {
+                this.loadFileData(currentFileId);
+            }
+        });
+    }
+
+    _loadFilesAuthorized() {
+        // load files (with auth user already)
+        let loadFilesPromise = this.loadFilesList();
+
+        // get the stored file id
+        let currentFileId = this.metadataService.get(this.cookieName);
         loadFilesPromise.then(res => {
             // if wasn't stored before, take the first file
             if (!currentFileId) {

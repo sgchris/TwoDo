@@ -1,17 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
+import { TwodoAuthService } from './twodo-auth.service';
 
 @Injectable()
 export class WebapiService {
 
     constructor(
         private http: HttpClient,
-        private configService: ConfigService
+        private configService: ConfigService,
+        private authService: TwodoAuthService
     ) { }
 
     // GET requests
     get(url, params = {}, callbackFn = undefined) {
+
+        // add authentication token
+        if (this.authService.isLoggedIn && this.authService.accessToken) {
+            params['access_token'] = this.authService.accessToken;
+        }
+
         // prepare the URL
         const requestUrl = this.configService.API_BASE_URL + url + '.php';
 
@@ -28,6 +36,12 @@ export class WebapiService {
 
     // POST requests
     post(url, params = {}, callbackFn = undefined) {
+
+        // add authentication token
+        if (this.authService.isLoggedIn && this.authService.accessToken) {
+            params['access_token'] = this.authService.accessToken;
+        }
+
         // prepare the URL
         const requestUrl = this.configService.API_BASE_URL + url + '.php';
 

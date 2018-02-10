@@ -9,6 +9,12 @@
 # Database files
 *.db
 
+# config files
+/src/api/tools/config.ini
+
+# php libs
+vendor
+
 # dependencies
 /node_modules
 
@@ -20,6 +26,9 @@
 *.launch
 .settings/
 *.sublime-workspace
+.codelite
+*.phprj
+*.workspace
 
 # IDE - VSCode
 .vscode/*
@@ -44,4 +53,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-

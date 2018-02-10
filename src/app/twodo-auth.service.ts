@@ -5,6 +5,7 @@ import { FacebookLoginProvider } from "angular5-social-login";
 @Injectable()
 export class TwodoAuthService {
     user;
+    accessToken;
     isLoggedIn = false;
 
     // event is emitted upon current file change
@@ -14,10 +15,16 @@ export class TwodoAuthService {
         this.fbAuthService.authState.subscribe((user) => {
             this.user = user;
             this.isLoggedIn = (user != null);
+            this.accessToken = user ? user.token : false;
 
             // fire event forward
             this.authUpdateEvent.emit(this.user);
         });
+    }
+
+    // check if the user is logged in, and execute the callback
+    checkAuth(callbackFn) {
+        // stopped here!!!
     }
 
     login() {

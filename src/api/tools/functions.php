@@ -75,26 +75,16 @@ function isCommandLineInterface() {
  * @return
  */
 function setRestrictedAccess() {
-	global $allowedUsers;
+    // TODO
+}
 
-	// wait, while the user is stored in the session
-	$counter = 30;
-	while (!isset($_SESSION) || !isset($_SESSION['user']) || !isset($_SESSION['user']['name'])) {
-		// in milliseconds
-		usleep(100 * 1000);
-
-		if (--$counter < 0) {
-			break;
-		}
-	}
-
-	if (!isset($_SESSION) || !isset($_SESSION['user']) || !isset($_SESSION['user']['name'])) {
-		_exit('Not logged in');
-	}
-
-	if (!in_array($_SESSION['user']['name'], $allowedUsers)) {
-		_exit('no permissions to do that operation');
-	}
+/**
+ * Get the current logged in user ID
+ * @return  
+ */
+function getUserId() {
+    // TODO
+    return null;
 }
 
 /**
