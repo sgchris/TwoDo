@@ -8,7 +8,7 @@ export class MetadataService {
         private webapiService: WebapiService
     ) { }
 
-    get(key:string, callbackFn) {
+    get(key:string, callbackFn = undefined) {
         let promise = this.webapiService.get('get_meta_data', {key});
         if (callbackFn) {
             promise.then(r => callbackFn(r));
@@ -16,7 +16,7 @@ export class MetadataService {
         return promise;
     }
 
-    set(key:string, value:any, callbackFn) {
+    set(key:string, value:any, callbackFn = undefined) {
         let promise = this.webapiService.post('set_meta_data', {key, value})
         if (callbackFn) {
             promise.then(r => callbackFn(r));
