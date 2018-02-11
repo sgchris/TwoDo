@@ -25,7 +25,7 @@ export class EditorComponent implements OnInit {
 
     constructor(
         private configService: ConfigService,
-        private filesService: FilesService
+        public filesService: FilesService
     ) {
 
     }

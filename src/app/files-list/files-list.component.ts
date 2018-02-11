@@ -21,9 +21,10 @@ export class FilesListComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private cookieService: CookieService,
-        private filesService: FilesService,
-        private configService: ConfigService
+        public filesService: FilesService,
+        public configService: ConfigService
     ) {
+      
 
     }
 

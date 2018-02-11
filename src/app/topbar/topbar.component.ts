@@ -8,7 +8,7 @@ import { TwodoAuthService } from './../twodo-auth.service'
 })
 export class TopbarComponent implements OnInit {
 
-    constructor(private twodoAuthService: TwodoAuthService) { }
+    constructor(public twodoAuthService: TwodoAuthService) { }
 
     ngOnInit() {
 
