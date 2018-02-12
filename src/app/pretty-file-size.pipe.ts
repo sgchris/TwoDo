@@ -6,6 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class PrettyFileSizePipe implements PipeTransform {
 
     transform(value: any, args?: any): any {
+        if (!value) {
+            return 'empty file';
+        }
         const oneMega = 1024 * 1024;
         const oneKilo = 1024;
 
