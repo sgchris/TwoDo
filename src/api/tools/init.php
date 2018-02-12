@@ -37,10 +37,8 @@ try {
 
 
 // FB authentication - check if already present in the session
-if (isset($_SESSION['fb']) && isset($_SESSION['fb']['access_token'])) {
-    $fbUserId = $_SESSION['fb']['userId'];
-    $fbUserName = $_SESSION['fb']['userName'];
-} else {
+if (!isset($_SESSION['fb']) || !isset($_SESSION['fb']['access_token'])) {
+    file_put_contents('/tmp/grinotes.log', date('H:i:s')." reading profile from FB and adding user to session\n", FILE_APPEND);
     $accessToken = $_REQUEST['access_token'] ?? false;
     if ($accessToken) {
         $fb = new \Facebook\Facebook([
@@ -64,6 +62,7 @@ if (isset($_SESSION['fb']) && isset($_SESSION['fb']['access_token'])) {
                     'email' => $fbUserData['email'],
                     'access_token' => $accessToken,
                 ];
+                file_put_contents('/tmp/grinotes.log', date('H:i:s')." added to session ".json_encode($_SESSION['fb'])."\n", FILE_APPEND);
                 
                 // check that the user is in the system
                 registerUser($fbUserData);
@@ -84,5 +83,6 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Max-Age: 1000');
 header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding');
 header('Access-Control-Allow-Methods: POST, GET');
+header('Access-Control-Allow-Credentials: true');
 
 header('Content-Type: application/json');

@@ -113,8 +113,16 @@ function registerUser($userData) {
  * @return  
  */
 function getUserId() {
-    return isset($_SESSION['fb']) && isset($_SESSION['fb']['id']) ? 
-        $_SESSION['fb']['id'] : 0;
+    if (!isset($_SESSION['fb']) || !isset($_SESSION['fb']['id'])) {
+        return false;
+    }
+    
+    $user = dbRow('SELECT * FROM users WHERE fbid = :fbid', ['fbid' => $_SESSION['fb']['id']]);
+    if (!$user) {
+        return false;
+    }
+    
+    return $user['id'];
 }
 
 /**
