@@ -36,7 +36,6 @@ export class WebapiService {
 
     // POST requests
     post(url, params = {}, callbackFn = undefined) {
-
         // add authentication token
         if (this.authService.isLoggedIn && this.authService.accessToken) {
             params['access_token'] = this.authService.accessToken;
@@ -46,10 +45,9 @@ export class WebapiService {
         const requestUrl = this.configService.API_BASE_URL + url + '.php';
 
         // prepare request parameters
-        let requestParams = new HttpParams();
-        for (let k in params) {
-            requestParams.set(k, params[k]);
-        }
+        let requestParams = new HttpParams({
+            fromObject: params
+        });
 
         // set request as form submit
         const requestOptions = {

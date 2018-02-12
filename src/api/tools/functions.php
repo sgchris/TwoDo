@@ -75,7 +75,37 @@ function isCommandLineInterface() {
  * @return
  */
 function setRestrictedAccess() {
-    // TODO
+    if (!isset($_SESSION['fb']) || !isset($_SESSION['fb']['access_token'])) {
+        _exit('the operation is not permitted');
+    }
+}
+
+/**
+ * Check if the user is already in the system, and if not, add him
+ * @param mixed $userData 
+ * @return  
+ */
+function registerUser($userData) {
+    if (!isset($userData['id'])) {
+        return false;
+    }
+    
+    // get the user from the database
+    $user = dbRow('SELECT * FROM users WHERE fbid = :fbid', ['fbid' => $userData['id']]);
+    if (!$user) {
+        $res = dbExec(
+            'INSERT INTO users (name, email, fbid, date_created) VALUES (:name, :email, :fbid, :date_created)', 
+            [
+                'name' => $userData['name'], 
+                'email' => ($userData['email']??''), 
+                'fbid' => $userData['id'], 
+                'date_created' => time(),
+            ]
+        );
+        if (!$res) {
+            _exit('Cannot register the user');
+        }
+    }
 }
 
 /**
@@ -83,8 +113,8 @@ function setRestrictedAccess() {
  * @return  
  */
 function getUserId() {
-    // TODO
-    return null;
+    return isset($_SESSION['fb']) && isset($_SESSION['fb']['id']) ? 
+        $_SESSION['fb']['id'] : 0;
 }
 
 /**

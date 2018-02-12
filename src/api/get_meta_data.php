@@ -4,6 +4,7 @@ require_once __DIR__.'/tools/init.php';
 
 requestShouldBe('get');
 
+// allow read data for authorized users only
 setRestrictedAccess();
 
 $params = receiveParams(

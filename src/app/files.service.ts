@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './config.service';
 import { WebapiService } from './webapi.service';
@@ -18,7 +17,6 @@ export class FilesService {
     currentFileUpdateEvent: EventEmitter<any> = new EventEmitter();
 
     constructor(
-        private http: HttpClient,
         private cookieService: CookieService,
         private configService: ConfigService,
         private webapi: WebapiService,
@@ -54,6 +52,7 @@ export class FilesService {
     }
 
     _loadFilesAuthorized() {
+        console.log('load files authorized');
         // load files (with auth user already)
         let loadFilesPromise = this.loadFilesList();
 
@@ -116,8 +115,7 @@ export class FilesService {
     }
 
     setCurrentFileId(fileId) {
-        let loadFileDataPromise = this.loadFileData(fileId);
-        loadFileDataPromise.then(res => {
+        this.loadFileData(fileId).then(res => {
             if (res['result'] == 'ok') {
                 // store the selection in the cookie
                 const expiresInDays = 365;
@@ -136,36 +134,14 @@ export class FilesService {
             return;
         }
 
-        // prepare request parameters
-        const requestUrl = this.configService.API_BASE_URL + 'add_file_version.php';
-        const requestParams = new HttpParams()
-            .set('file_id', this.currentFile.data.id)
-            .set('content', newContent);
-        const requestOptions = {
-            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
-        };
-
-        // perform the request
-        let requestPromise = this.http.post(requestUrl, requestParams.toString(), requestOptions).toPromise();
-        return requestPromise;
+        return this.webapi.post('add_file_version', {
+            file_id: this.currentFile.data.id,
+            content: newContent
+        });
     }
 
     updateFileName(fileId, newFileName) {
-        const url = this.configService.API_BASE_URL + 'update_file.php';
-
-        const params = new HttpParams()
-            .set('file_id', String(fileId))
-            .set('name', String(newFileName));
-
-        const headers = {
-            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
-        };
-
-        // make the call
-        let renameFilePromise = this.http.post(url, params.toString(), headers).toPromise();
-
-        // update local data
-        renameFilePromise.then(res => {
+        return this.webapi.post('update_file', {file_id: String(fileId), name: String(newFileName)}, res => {
             if (res['result'] == 'ok') {
                 // update local data
                 for (let i in this.files) {
@@ -183,21 +159,11 @@ export class FilesService {
                 }
             }
         });
-
-        return renameFilePromise;
     }
 
     // create new file
     createFile(newFileName) {
-        const url = this.configService.API_BASE_URL + 'add_file.php';
-        const params = new HttpParams().set('name', newFileName);
-        const headers = {
-            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
-        };
-
-        // send the request
-        let addFilePromise = this.http.post(url, params.toString(), headers).toPromise();
-        addFilePromise.then(res => {
+        return this.webapi.post('add_file', {name: newFileName}, res => {
             if (res['result'] == 'ok') {
                 // add the new file to the list
                 this.files.push({
@@ -206,20 +172,10 @@ export class FilesService {
                 });
             }
         });
-
-        return addFilePromise;
     }
 
     deleteFile(fileId) {
-        const url = this.configService.API_BASE_URL + 'delete_file.php';
-        const params = new HttpParams().set('file_id', String(fileId));
-        const headers = {
-            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
-        };
-
-        // send the request
-        let deleteFilePromise = this.http.post(url, params.toString(), headers).toPromise();
-        deleteFilePromise.then(res => {
+        return this.webapi.post('delete_file', {file_id: String(fileId)}, res => {
             if (res['result'] == 'ok') {
 
                 // remove the file from the local list
@@ -247,8 +203,6 @@ export class FilesService {
                 }
             }
         });
-
-        return deleteFilePromise;
     }
 
 }

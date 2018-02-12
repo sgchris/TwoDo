@@ -4,6 +4,9 @@ require_once __DIR__.'/tools/init.php';
 
 requestShouldBe('get');
 
+// allow authorized users only
+setRestrictedAccess();
+
 $params = receiveParams(
 	$__params = ['file_id', 'version_id'],
 	$__required = ['file_id']
@@ -11,7 +14,7 @@ $params = receiveParams(
 
 // check version_id parameter
 $versionCondition = '';
-$sqlParamValues = ['file_id' => $params['file_id']];
+$sqlParamValues = ['file_id' => $params['file_id'], 'user_id' => getUserId()];
 if (isset($params['version_id'])) {
  	if (!is_numeric($params['version_id'])) {
 		_exit('version_id is not numeric');
@@ -27,7 +30,7 @@ $data = dbRow('
 	FROM files f
 		LEFT JOIN files_versions fv
 			ON fv.file_id = f.id '.$versionCondition.'
-	WHERE f.id = :file_id
+	WHERE f.id = :file_id AND f.user_id = :user_id
 	ORDER BY fv.date_created DESC
 	LIMIT 1',
 	$sqlParamValues
