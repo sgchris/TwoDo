@@ -12,11 +12,10 @@ $params = receiveParams(
 	$__required = ['key']
 );
 
-
 $row = dbRow('
     SELECT value FROM metadata WHERE key = :key AND user_id = :user_id
 ', ['key' => $params['key'], 'user_id' => getUserId()]);
-if ($row) {
+if (!$row) {
     _exit('Cannot get meta data row');
 }
 

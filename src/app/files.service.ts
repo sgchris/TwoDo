@@ -7,7 +7,7 @@ import { MetadataService } from './metadata.service';
 
 @Injectable()
 export class FilesService {
-    readonly cookieName = 'twodo_selected_file_id';
+    readonly currentFile_keyName = 'twodo_selected_file_id';
 
     // all the files are stored here
     files = [];
@@ -23,49 +23,23 @@ export class FilesService {
         private authService: TwodoAuthService,
         private metadataService: MetadataService
     ) {
-        this._loadFilesUnauthorized();
-
-        this.authService.authUpdateEvent.subscribe(user => {
-            this._loadFilesAuthorized();
-        })
+        this._loadFiles();
+        this.authService.authUpdateEvent.subscribe(user => this._loadFiles());
     }
 
-    // initialize the service for unauthorized users
-    // everything through localStorage
-    _loadFilesUnauthorized() {
+    _loadFiles() {
         // load files upon creation
-        let loadFilesPromise = this.loadFilesList();
+        this.loadFilesList().then(res => {
+            if (res['result'] != 'ok') return false;
 
-        // get the stored file id
-        let currentFileId = this.cookieService.get(this.cookieName);
-        loadFilesPromise.then(res => {
-            // if wasn't stored before, take the first file
-            if (!currentFileId) {
-                currentFileId = res['files'] && res['files'].length > 0 ? res['files'][0]['id'] : false;
-            }
-
-            // load file data
-            if (currentFileId) {
-                this.loadFileData(currentFileId);
-            }
-        });
-    }
-
-    _loadFilesAuthorized() {
-        console.log('load files authorized');
-        // load files (with auth user already)
-        let loadFilesPromise = this.loadFilesList();
-
-        // get the stored file id
-        let currentFileId = this.metadataService.get(this.cookieName);
-        loadFilesPromise.then(res => {
-            // if wasn't stored before, take the first file
-            if (!currentFileId) {
-                currentFileId = res['files'] && res['files'].length > 0 ? res['files'][0]['id'] : false;
-            }
-
-            // load file data
-            if (currentFileId) {
+            if (this.authService.isLoggedIn) {
+                this.metadataService.get(this.currentFile_keyName).then(metaRes => {
+                    // get the last selected file ID
+                    const currentFileId = (metaRes['result'] == 'ok') ? metaRes['value'] : false;
+                    this.loadFileData(currentFileId);
+                });
+            } else {
+                let currentFileId = this.cookieService.get(this.currentFile_keyName);
                 this.loadFileData(currentFileId);
             }
         });
@@ -73,13 +47,22 @@ export class FilesService {
 
     loadFileData(fileId = undefined, versionId = undefined) {
         // prepare the params
-        if (fileId == undefined) {
+        if (!fileId) {
             if (this.currentFile && this.currentFile.data.id) {
                 fileId = this.currentFile.data.id;
-            } else {
-                return;
             }
         }
+
+        // if no file ID, take the first file from the list
+        if (!fileId) {
+            fileId = this.files && this.files.length > 0 ? this.files[0].id : false;
+        }
+
+        if (!fileId) {
+            return false;
+        }
+
+        // // load the file from the server
 
         let params = {
             'file_id': fileId
@@ -115,17 +98,22 @@ export class FilesService {
     }
 
     setCurrentFileId(fileId) {
-        this.loadFileData(fileId).then(res => {
-            if (res['result'] == 'ok') {
-                // store the selection in the cookie
-                const expiresInDays = 365;
-                this.cookieService.set(this.cookieName, fileId, expiresInDays);
-            }
-
-            if (res['result'] != 'ok' || fileId == 0) {
-                this.currentFile = null;
-            }
-        });
+        let loadFileSucceeded = this.loadFileData(fileId)
+        if (loadFileSucceeded) {
+            loadFileSucceeded.then(res => {
+                if (res['result'] == 'ok') {
+                    // store the selection in the cookie
+                    if (this.authService.isLoggedIn) {
+                        this.metadataService.set(this.currentFile_keyName, fileId);
+                    } else {
+                        const expiresInDays = 365;
+                        this.cookieService.set(this.currentFile_keyName, fileId, expiresInDays);
+                    }
+                } else {
+                    this.currentFile = null;
+                }
+            });
+        }
     }
 
     // update current file content
@@ -141,7 +129,7 @@ export class FilesService {
     }
 
     updateFileName(fileId, newFileName) {
-        return this.webapi.post('update_file', {file_id: String(fileId), name: String(newFileName)}, res => {
+        return this.webapi.post('update_file', { file_id: String(fileId), name: String(newFileName) }, res => {
             if (res['result'] == 'ok') {
                 // update local data
                 for (let i in this.files) {
@@ -163,7 +151,7 @@ export class FilesService {
 
     // create new file
     createFile(newFileName) {
-        return this.webapi.post('add_file', {name: newFileName}, res => {
+        return this.webapi.post('add_file', { name: newFileName }, res => {
             if (res['result'] == 'ok') {
                 // add the new file to the list
                 this.files.push({
@@ -175,7 +163,7 @@ export class FilesService {
     }
 
     deleteFile(fileId) {
-        return this.webapi.post('delete_file', {file_id: String(fileId)}, res => {
+        return this.webapi.post('delete_file', { file_id: String(fileId) }, res => {
             if (res['result'] == 'ok') {
 
                 // remove the file from the local list

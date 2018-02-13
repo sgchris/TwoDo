@@ -13,15 +13,12 @@ $params = receiveParams(
 );
 
 
-$row = dbExec('
-    REPLACE INTO metadata SET 
-        value = :value 
-    WHERE 
-        key = :key AND 
-        user_id = :user_id', 
-    ['key' => $params['key'], 'value' => $params['value'], 'user_id' => getUserId()]);
-if ($row) {
+$res = dbExec('
+    REPLACE INTO metadata (key, value, user_id) values (:key, :value, :user_id)',
+    ['value' => $params['value'], 'key' => $params['key'], 'user_id' => getUserId()]);
+
+if (!$res) {
     _exit('Cannot update meta data');
 }
 
-_success(['value' => $row['value']]);
+_success(['value' => $params['value']]);

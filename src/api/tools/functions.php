@@ -75,30 +75,33 @@ function isCommandLineInterface() {
  * @return
  */
 function setRestrictedAccess() {
-    if (!isset($_SESSION['fb']) || !isset($_SESSION['fb']['access_token'])) {
+	global $fbUser;
+	if (!$fbUser) {
         _exit('the operation is not permitted');
     }
+
+	return true;
 }
 
 /**
  * Check if the user is already in the system, and if not, add him
- * @param mixed $userData 
- * @return  
+ * @param mixed $userData
+ * @return
  */
 function registerUser($userData) {
     if (!isset($userData['id'])) {
         return false;
     }
-    
+
     // get the user from the database
     $user = dbRow('SELECT * FROM users WHERE fbid = :fbid', ['fbid' => $userData['id']]);
     if (!$user) {
         $res = dbExec(
-            'INSERT INTO users (name, email, fbid, date_created) VALUES (:name, :email, :fbid, :date_created)', 
+            'INSERT INTO users (name, email, fbid, date_created) VALUES (:name, :email, :fbid, :date_created)',
             [
-                'name' => $userData['name'], 
-                'email' => ($userData['email']??''), 
-                'fbid' => $userData['id'], 
+                'name' => $userData['name'],
+                'email' => ($userData['email']??''),
+                'fbid' => $userData['id'],
                 'date_created' => time(),
             ]
         );
@@ -110,18 +113,19 @@ function registerUser($userData) {
 
 /**
  * Get the current logged in user ID
- * @return  
+ * @return
  */
 function getUserId() {
-    if (!isset($_SESSION['fb']) || !isset($_SESSION['fb']['id'])) {
-        return false;
-    }
-    
-    $user = dbRow('SELECT * FROM users WHERE fbid = :fbid', ['fbid' => $_SESSION['fb']['id']]);
+	global $fbUser;
+	if (!$fbUser) {
+		return 0;
+	}
+
+    $user = dbRow('SELECT * FROM users WHERE fbid = :fbid', ['fbid' => $fbUser['id']]);
     if (!$user) {
         return false;
     }
-    
+
     return $user['id'];
 }
 

@@ -11,7 +11,11 @@ export class MetadataService {
     get(key:string, callbackFn = undefined) {
         let promise = this.webapiService.get('get_meta_data', {key});
         if (callbackFn) {
-            promise.then(r => callbackFn(r));
+            promise.then(res => {
+                if (res['result'] == 'ok') {
+                    callbackFn(res['value']);
+                }
+            });
         }
         return promise;
     }
@@ -19,7 +23,11 @@ export class MetadataService {
     set(key:string, value:any, callbackFn = undefined) {
         let promise = this.webapiService.post('set_meta_data', {key, value})
         if (callbackFn) {
-            promise.then(r => callbackFn(r));
+            promise.then(res => {
+                if (res['result'] == 'ok') {
+                    callbackFn();
+                }
+            });
         }
         return promise;
     }
