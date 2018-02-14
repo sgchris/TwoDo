@@ -1,6 +1,7 @@
 h4 {
     margin-bottom: 0;
 }
+
 .card-title button {
     margin-left: 5px;
 }
@@ -21,4 +22,13 @@ h4 {
 
 .file-content-area {
     background-color: #fffde0;
+    min-height: 280px;
+}
+
+.file-content-area-empty {
+    line-height: 100%;
+    font-size: 50px;
+    text-align: center;
+    padding-top: 50px;
+    color: #DDD;
 }

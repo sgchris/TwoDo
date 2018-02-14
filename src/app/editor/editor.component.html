@@ -48,4 +48,5 @@
     </div>
     <div #actualContentEl *ngIf="filesService.currentFile" class="card-text alert border file-content-area" (window:keydown)="contentKeyPress($event)" contenteditable="true" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}" [innerHTML]="filesService.currentFile.data.content"
         (input)="changesMade = true"></div>
+    <div #actualContentEl *ngIf="!filesService.currentFile" class="card-text alert border file-content-area file-content-area-empty">Content goes here</div>
 </div>
