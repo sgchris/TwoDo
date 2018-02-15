@@ -7,12 +7,16 @@
             <button type="button"
                 [disabled]="!changesMade"
                 (click)="saveFile()"
-                class="btn btn-primary btn-sm float-right"
-                title="Save changes"><i class="fa fa-save"></i> Save changes</button>
+                class="btn btn-sm float-right"
+                [ngClass]="{
+                    'btn-primary': changesMade,
+                    'btn-outline-primary': !changesMade}
+                "
+                title="Save changes (Ctrl-S)"><i class="fa fa-save"></i> Save changes</button>
 
             <!-- Previous version -->
             <div class="dropdown float-right" *ngIf="filesService.currentFile && filesService.currentFile.data.total_versions > 1">
-                <button class="btn btn-secondary dropdown-toggle btn-sm"
+                <button class="btn btn-outline-secondary dropdown-toggle btn-sm"
                     type="button" id="dropdownMenu2"
                     data-toggle="dropdown"
                     aria-haspopup="true"
@@ -46,7 +50,14 @@
                 title="{{filesService.currentFile.data.name}}">File Name: <strong>{{filesService.currentFile.data.name}}</strong></span>
         </h4>
     </div>
-    <div #actualContentEl *ngIf="filesService.currentFile" class="card-text alert border file-content-area" (window:keydown)="contentKeyPress($event)" contenteditable="true" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}" [innerHTML]="filesService.currentFile.data.content"
+    <div #actualContentEl *ngIf="filesService.currentFile"
+        class="card-text alert border file-content-area"
+        (window:keydown)="contentKeyPress($event)"
+        contenteditable="true"
+         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
+         [innerHTML]="filesService.currentFile.data.content"
         (input)="changesMade = true"></div>
-    <div #actualContentEl *ngIf="!filesService.currentFile" class="card-text alert border file-content-area file-content-area-empty">Content goes here</div>
+    <div #actualContentEl *ngIf="!filesService.currentFile"
+        [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
+        class="card-text alert border file-content-area file-content-area-empty">Content goes here</div>
 </div>

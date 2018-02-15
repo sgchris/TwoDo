@@ -42,7 +42,7 @@ h4 {
 }
 
 .files-wrapper {
-    XXXmin-height: 280px;
+    min-height: 280px;
 }
 
 p.file-name {

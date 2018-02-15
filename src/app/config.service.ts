@@ -5,7 +5,7 @@ declare var $ :any;
 @Injectable()
 export class ConfigService {
     // define constants
-    API_BASE_URL: string = "http://localhost/TwoDo/src/api/";
+    API_BASE_URL: string = "http://localhost/grinotes.com/src/api/";
 
     FACEBOOK_APP_ID: string = "398979010545997";
 

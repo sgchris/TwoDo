@@ -24,7 +24,7 @@ export class EditorComponent implements OnInit {
     changesMade = false;
 
     constructor(
-        private configService: ConfigService,
+        public configService: ConfigService,
         public filesService: FilesService
     ) {
 
