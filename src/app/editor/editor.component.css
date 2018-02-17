@@ -32,3 +32,8 @@ h4 {
     padding-top: 50px;
     color: #DDD;
 }
+
+.right-to-left {
+    direction: rtl !important;
+    text-align: right;
+}

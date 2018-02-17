@@ -15,7 +15,7 @@ $params = receiveParams(
 // check version_id parameter
 $versionCondition = '';
 $sqlParamValues = ['file_id' => $params['file_id'], 'user_id' => getUserId()];
-if (isset($params['version_id'])) {
+if (isset($params['version_id']) && !empty($params['version_id'])) {
  	if (!is_numeric($params['version_id'])) {
 		_exit('version_id is not numeric');
 	}
@@ -25,16 +25,17 @@ if (isset($params['version_id'])) {
 }
 
 // get latest version
-$data = dbRow('
-	SELECT f.id, f.name, fv.content, fv.date_created
+$sql = '
+	SELECT f.id, f.name,
+		IFNULL(fv.content, "") as content,
+		IFNULL(fv.date_created, 0) as date_created
 	FROM files f
 		LEFT JOIN files_versions fv
 			ON fv.file_id = f.id '.$versionCondition.'
 	WHERE f.id = :file_id AND f.user_id = :user_id
 	ORDER BY fv.date_created DESC
-	LIMIT 1',
-	$sqlParamValues
-);
+	LIMIT 1';
+$data = dbRow($sql, $sqlParamValues);
 if (!$data) {
 	_exit('File not found');
 }

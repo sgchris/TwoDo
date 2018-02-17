@@ -8,6 +8,7 @@ import { MetadataService } from './metadata.service';
 @Injectable()
 export class FilesService {
     readonly currentFile_keyName = 'twodo_selected_file_id';
+    readonly hebrewLetters = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת';
 
     // all the files are stored here
     files = [];
@@ -79,13 +80,28 @@ export class FilesService {
                 this.currentFile = {
                     'data': res['data'],
                     'versions': res['versions'],
-                    'version': 0
+                    'version': 0,
+                    'hasHebrewLetters': this._contentHasHebrewLetters(res['data'].content)
                 };
 
                 // broadcast the change
                 this.currentFileUpdateEvent.emit(this.currentFile);
             }
         });
+    }
+
+    // check if the content parameter has hebrew letters
+    _contentHasHebrewLetters(content) {
+        let hebLetters = this.hebrewLetters.split('');
+        let hasHebLetters = false;
+        for (let i in hebLetters) {
+            if (content.indexOf(hebLetters[i]) >= 0) {
+                hasHebLetters = true;
+                break;
+            }
+        }
+
+        return hasHebLetters;
     }
 
     // load all files from the server

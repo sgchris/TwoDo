@@ -9,19 +9,23 @@ import { ConfigService } from '../config.service';
     styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
+
     // elements bindings
     @ViewChild('actualContentEl') actualContentEl: ElementRef;
 
     // inputs
     @Input('fileId') fileId;
 
+
     // local vars
     filename = 'Unnamed'
+
 
     // 0 - latest, N - N versions back
     currentVersion = 0;
     editFilenameInProgress = false
     changesMade = false;
+    contentHasHebrewLetters = false;
 
     constructor(
         public configService: ConfigService,

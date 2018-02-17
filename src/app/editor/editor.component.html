@@ -50,13 +50,16 @@
                 title="{{filesService.currentFile.data.name}}">File Name: <strong>{{filesService.currentFile.data.name}}</strong></span>
         </h4>
     </div>
+    <!-- FULL! editor with content -->
     <div #actualContentEl *ngIf="filesService.currentFile"
         class="card-text alert border file-content-area"
+        [ngClass]="{'right-to-left': filesService.currentFile.hasHebrewLetters}"
         (window:keydown)="contentKeyPress($event)"
         contenteditable="true"
-         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
-         [innerHTML]="filesService.currentFile.data.content"
+        [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
+        [innerHTML]="filesService.currentFile.data.content"
         (input)="changesMade = true"></div>
+    <!-- EMPTY! placeholder when file is not selected -->
     <div #actualContentEl *ngIf="!filesService.currentFile"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
         class="card-text alert border file-content-area file-content-area-empty">Content goes here</div>
