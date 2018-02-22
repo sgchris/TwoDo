@@ -6,7 +6,7 @@ Keep and maintain your notes and documents online
 GriNotes is a _free_ and _open source_ application
 based on common web technologies like AngularJS, Bootstrap and more...
 
-All the codebase is published on [GitHub](https://github.com/sgchris/grinotes.git){:target="_blank"}
+All the codebase is published on [GitHub](https://github.com/sgchris/grinotes.git)
 
 ## Simple
 
