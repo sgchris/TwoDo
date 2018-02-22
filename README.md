@@ -12,7 +12,7 @@ All the codebase is published on [GitHub](https://github.com/sgchris/grinotes.gi
 
 Easy and intuitive single page interface.
 
-*No registration required* - the authentication is done through your Facebook account
+**No registration required** - the authentication is done through your Facebook account
 
 ## Unlimited
 
