@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FilesService } from '../files.service';
 import { ConfigService } from '../config.service';
@@ -19,12 +18,11 @@ export class FilesListComponent implements OnInit {
     newFilename = false;
 
     constructor(
-        private http: HttpClient,
         private cookieService: CookieService,
         public filesService: FilesService,
         public configService: ConfigService
     ) {
-      
+
 
     }
 

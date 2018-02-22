@@ -1,0 +1,10 @@
+.promo-wrapper {
+    background: transparent url("/assets/images/bg1.jpg") center center no-repeat;
+    min-height: 500px;
+    margin-top: -56px;
+}
+
+.promo-text {
+    padding-top: 200px;
+    color: #EEE;
+}

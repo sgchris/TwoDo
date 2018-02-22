@@ -2,7 +2,7 @@
 <app-topbar></app-topbar>
 
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="twodoAuthService.isLoggedIn">
     <div class="row">
         <div class="col col-md-6 col-sm-12">
             <app-editor [fileId]="selectedFileId"></app-editor>
@@ -11,4 +11,62 @@
             <app-files-list (fileSelected)="fileSelected($event);"></app-files-list>
         </div>
     </div>
+</div>
+
+<div  *ngIf="!twodoAuthService.isLoggedIn">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-sm-12 promo-wrapper">
+                <div class="container">
+                    <div class="row">
+                        <div class="col col-sm-12 promo-text">
+                            <h1>Gri<strong>Notes</strong></h1>
+                            <h2>Grimember things better</h2>
+                            <br />
+                            <br />
+                            <div>
+                                <button type="button" class="btn btn-primary" (click)="twodoAuthService.login();">Login with Facebook</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+    <br/>
+    <div class="container">
+        <div class="row">
+            <div class="col col-12 col-md-4">
+                <h3>Free</h3>
+                <p>
+                    GriNotes is a <strong>free</strong> and <strong>open source</strong> application
+                    based on common web technologies like AngularJS, Bootstrap and more<br/>
+                    <br/>
+                    All the codebase is published on <a href="https://github.com/sgchris/grinotes.git" target="_blank">GitHub <i class="fas fa-external-link-alt"></i></a>.
+                </p>
+            </div>
+            <div class="col col-12 col-md-4">
+                <h3>Simple</h3>
+                <p>
+                    Easy and intuitive single page interface.<br />
+                    <strong>No registration required</strong> - the authentication is
+                    done through your Facebook account
+                </p>
+            </div>
+            <div class="col col-12 col-md-4">
+                <h3>Unlimited</h3>
+                <p>
+                    Every file keeps its changes history from the moment of its creation.
+                </p>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+
+    <nav class="navbar sticky-bottom navbar-dark bg-dark fixed-bottom">
+        <small><a href="mailto:grinotes.com@gmail.com" style="color:#FFF;">grinotes.com@gmail.com</a></small>
+    </nav>
 </div>

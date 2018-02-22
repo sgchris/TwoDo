@@ -1,3 +1,7 @@
+.top-bar-unauthorized {
+    background: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
 .navbar-login-icon {
     width: 40px;
     height: 40px;
@@ -18,4 +22,5 @@
     margin:0;
     padding:0;
     vertical-align: top;
+    border-radius: 20px;
 }

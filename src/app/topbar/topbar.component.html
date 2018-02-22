@@ -1,22 +1,17 @@
-<nav class="navbar sticky-top navbar-dark bg-dark">
+<nav class="navbar sticky-top navbar-dark bg-dark" [ngClass]="{'top-bar-unauthorized': !twodoAuthService.isLoggedIn}">
     <!-- Logo and title -->
     <a class="navbar-brand" href="JavaScript:;" title="Grimember things better">
-        <i class="fa fa-list-ul"></i> GriNotes<span *ngIf="twodoAuthService.isLoggedIn"> ({{twodoAuthService.user.name}})</span>
+        <i class="fas fa-at"></i> Gri<strong>Notes</strong> <small>Grimember Things Better</small>
     </a>
 
     <!-- Search form -->
-    <form class="form-inline ml-auto">
+    <form class="form-inline ml-auto" *ngIf="twodoAuthService.isLoggedIn">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-secondary" type="submit">Search</button>
     </form>
 
 
     <!-- The login button -->
-    <a *ngIf="!twodoAuthService.isLoggedIn"
-        title="Click to sign in using Facebook"
-        class="btn btn-link navbar-login-icon" (click)="login()">
-        <i class="fa-inverse fab fa-facebook-square"></i>
-    </a>
     <a *ngIf=" twodoAuthService.isLoggedIn"
         title="Logged in as {{twodoAuthService.user.name}}. Click to sign out"
         class="btn btn-link navbar-login-icon" (click)="logout()">
