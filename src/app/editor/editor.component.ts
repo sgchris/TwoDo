@@ -24,7 +24,6 @@ export class EditorComponent implements OnInit {
     // 0 - latest, N - N versions back
     currentVersion = 0;
     editFilenameInProgress = false
-    changesMade = false;
     contentHasHebrewLetters = false;
 
     constructor(
@@ -36,7 +35,7 @@ export class EditorComponent implements OnInit {
 
     ngOnInit() {
         this.filesService.currentFileUpdateEvent.subscribe(selectedFile => {
-            this.changesMade = false;
+            this.filesService.currentFile.changesMade = false;
 
             if (this.currentVersion === null) {
                 this.currentVersion = Number(selectedFile.data.total_versions) - 1;
@@ -65,7 +64,7 @@ export class EditorComponent implements OnInit {
     }
 
     loadPrevVersion() {
-        if (this.changesMade && !confirm('Changes made, discard?')) {
+        if (this.filesService.currentFile.changesMade && !confirm('Changes made, discard?')) {
             return;
         }
 
@@ -78,7 +77,7 @@ export class EditorComponent implements OnInit {
     }
 
     loadNextVersion() {
-        if (this.changesMade && !confirm('Changes made, discard?')) {
+        if (this.filesService.currentFile.changesMade && !confirm('Changes made, discard?')) {
             return;
         }
 
@@ -90,7 +89,7 @@ export class EditorComponent implements OnInit {
     }
 
     loadLatestVersion() {
-        if (this.changesMade && !confirm('Changes made, discard?')) {
+        if (this.filesService.currentFile.changesMade && !confirm('Changes made, discard?')) {
             return;
         }
 
@@ -103,14 +102,14 @@ export class EditorComponent implements OnInit {
 
 
     saveFile() {
-        if (!this.changesMade) return;
+        if (!this.filesService.currentFile.changesMade) return;
 
         // prepare the new content
         const newContent = this.actualContentEl.nativeElement.innerHTML;
 
         this.filesService.updateFileContent(newContent).then(res => {
             if (res['result'] == 'ok') {
-                this.changesMade = false;
+                this.filesService.currentFile.changesMade = false;
                 this.currentVersion = 0;
 
                 this.filesService.loadFilesList();

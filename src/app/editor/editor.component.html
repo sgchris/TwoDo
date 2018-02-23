@@ -5,12 +5,12 @@
             <!-- buttons -->
             <!-- save -->
             <button type="button"
-                [disabled]="!changesMade"
+                [disabled]="!filesService.currentFile.changesMade"
                 (click)="saveFile()"
                 class="btn btn-sm float-right"
                 [ngClass]="{
-                    'btn-primary': changesMade,
-                    'btn-outline-primary': !changesMade}
+                    'btn-primary': filesService.currentFile.changesMade,
+                    'btn-outline-primary': !filesService.currentFile.changesMade}
                 "
                 title="Save changes (Ctrl-S)"><i class="fa fa-save"></i> Save changes</button>
 
@@ -58,7 +58,7 @@
         contenteditable="true"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
         [innerHTML]="filesService.currentFile.data.content"
-        (input)="changesMade = true"></div>
+        (input)="filesService.currentFile.changesMade = true"></div>
     <!-- EMPTY! placeholder when file is not selected -->
     <div #actualContentEl *ngIf="!filesService.currentFile"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"

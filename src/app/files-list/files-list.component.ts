@@ -33,6 +33,11 @@ export class FilesListComponent implements OnInit {
     }
 
     openFile(fileId) {
+        // discard current changes
+        if (this.filesService.currentFile.changesMade && !confirm('Changes made. Discard?')) {
+            return;
+        }
+
         this.filesService.setCurrentFileId(fileId);
 
         // close renaming form (if open)

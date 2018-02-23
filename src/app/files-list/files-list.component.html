@@ -10,9 +10,8 @@
         <div class="card file-wrapper float-left"
                 [ngClass]="{'selected-file': (selectedFileId == file.id)}"
                 *ngFor="let file of filesService.files">
-            <button type="button" title="Delete the file" class="btn btn-link btn-sm delete-file-button" (click)="deleteFile(file.id);">&times;</button>
-            <!-- <img (click)="openFile(file.id)" class="card-img-top" src="assets/images/file2.png" alt="{{file.name}}" /> -->
-            <div class="file-icon-wrapper" (click)="openFile(file.id)">
+            <button type="button" title="Delete &quot;{{file.name}}&quot;" class="btn btn-link btn-sm delete-file-button" (click)="deleteFile(file.id);">&times;</button>
+            <div class="file-icon-wrapper" (click)="openFile(file.id)" title="Click to open &quot;{{file.name}}&quot;">
                 <i class="far fa-file-alt fa-8x"></i>
             </div>
             <div class="card-body">
