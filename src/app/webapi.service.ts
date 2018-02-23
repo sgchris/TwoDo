@@ -6,6 +6,8 @@ import { TwodoAuthService } from './twodo-auth.service';
 @Injectable()
 export class WebapiService {
 
+    inProgress = false;
+
     constructor(
         private http: HttpClient,
         private configService: ConfigService,
@@ -14,6 +16,7 @@ export class WebapiService {
 
     // GET requests
     get(url, params = {}, callbackFn = undefined) {
+        this.inProgress = true;
 
         // add authentication token
         if (this.authService.isLoggedIn && this.authService.accessToken) {
@@ -26,6 +29,8 @@ export class WebapiService {
         // make the request
         let promise = this.http.get(requestUrl, { params }).toPromise();
 
+        promise.then(res => this.inProgress = false)
+
         // check callback
         if (callbackFn) {
             promise.then(callbackFn);
@@ -36,6 +41,8 @@ export class WebapiService {
 
     // POST requests
     post(url, params = {}, callbackFn = undefined) {
+        this.inProgress = true;
+
         // add authentication token
         if (this.authService.isLoggedIn && this.authService.accessToken) {
             params['access_token'] = this.authService.accessToken;
@@ -56,6 +63,8 @@ export class WebapiService {
 
         // perform the request
         let promise = this.http.post(requestUrl, requestParams.toString(), requestOptions).toPromise();
+
+        promise.then(res => this.inProgress = false)
 
         // check callback
         if (callbackFn) {

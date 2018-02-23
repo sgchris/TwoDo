@@ -5,12 +5,13 @@
             <!-- buttons -->
             <!-- save -->
             <button type="button"
-                [disabled]="!filesService.currentFile.changesMade"
+                [disabled]="!filesService.currentFile || !filesService.currentFile.changesMade"
                 (click)="saveFile()"
                 class="btn btn-sm float-right"
                 [ngClass]="{
-                    'btn-primary': filesService.currentFile.changesMade,
-                    'btn-outline-primary': !filesService.currentFile.changesMade}
+                    'invisible': !filesService.currentFile,
+                    'btn-primary': filesService.currentFile && filesService.currentFile.changesMade,
+                    'btn-outline-primary': !filesService.currentFile || !filesService.currentFile.changesMade}
                 "
                 title="Save changes (Ctrl-S)"><i class="fa fa-save"></i> Save changes</button>
 
@@ -48,6 +49,7 @@
             <!-- the name of the file -->
             <span *ngIf="filesService.currentFile"
                 title="{{filesService.currentFile.data.name}}">File Name: <strong>{{filesService.currentFile.data.name}}</strong></span>
+            <span *ngIf="!filesService.currentFile">Editor</span>
         </h4>
     </div>
     <!-- FULL! editor with content -->
@@ -62,5 +64,5 @@
     <!-- EMPTY! placeholder when file is not selected -->
     <div #actualContentEl *ngIf="!filesService.currentFile"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
-        class="card-text alert border file-content-area file-content-area-empty">Content goes here</div>
+        class="card-text alert border file-content-area content-area-empty">Content goes here</div>
 </div>

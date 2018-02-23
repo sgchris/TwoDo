@@ -35,7 +35,9 @@ export class EditorComponent implements OnInit {
 
     ngOnInit() {
         this.filesService.currentFileUpdateEvent.subscribe(selectedFile => {
-            this.filesService.currentFile.changesMade = false;
+            if (this.filesService.currentFile) {
+                this.filesService.currentFile.changesMade = false;
+            }
 
             if (this.currentVersion === null) {
                 this.currentVersion = Number(selectedFile.data.total_versions) - 1;
@@ -58,13 +60,22 @@ export class EditorComponent implements OnInit {
     }
 
     _loadFileAtCurrentVersion() {
+        if (!this.filesService.currentFile) {
+            return;
+        }
+
         const fileId = this.filesService.currentFile.data.id;
         const prevVersionId = this.filesService.currentFile.versions[this.currentVersion].id;
         this.filesService.loadFileData(fileId, prevVersionId);
     }
 
     loadPrevVersion() {
-        if (this.filesService.currentFile.changesMade && !confirm('Changes made, discard?')) {
+        if (!this.filesService.currentFile) {
+            return;
+        }
+
+        if (this.filesService.currentFile.changesMade &&
+            !confirm('Changes made, discard?')) {
             return;
         }
 
@@ -77,6 +88,10 @@ export class EditorComponent implements OnInit {
     }
 
     loadNextVersion() {
+        if (!this.filesService.currentFile) {
+            return;
+        }
+
         if (this.filesService.currentFile.changesMade && !confirm('Changes made, discard?')) {
             return;
         }
@@ -89,6 +104,10 @@ export class EditorComponent implements OnInit {
     }
 
     loadLatestVersion() {
+        if (!this.filesService.currentFile) {
+            return;
+        }
+
         if (this.filesService.currentFile.changesMade && !confirm('Changes made, discard?')) {
             return;
         }
@@ -102,6 +121,10 @@ export class EditorComponent implements OnInit {
 
 
     saveFile() {
+        if (!this.filesService.currentFile) {
+            return;
+        }
+
         if (!this.filesService.currentFile.changesMade) return;
 
         // prepare the new content

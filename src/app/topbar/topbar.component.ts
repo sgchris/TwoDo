@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TwodoAuthService } from './../twodo-auth.service'
+import { WebapiService } from './../webapi.service';
 
 @Component({
     selector: 'app-topbar',
@@ -8,7 +9,10 @@ import { TwodoAuthService } from './../twodo-auth.service'
 })
 export class TopbarComponent implements OnInit {
 
-    constructor(public twodoAuthService: TwodoAuthService) { }
+    constructor(
+        public twodoAuthService: TwodoAuthService,
+        public webapi: WebapiService
+    ) { }
 
     ngOnInit() {
 

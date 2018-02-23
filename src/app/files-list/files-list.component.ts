@@ -34,7 +34,9 @@ export class FilesListComponent implements OnInit {
 
     openFile(fileId) {
         // discard current changes
-        if (this.filesService.currentFile.changesMade && !confirm('Changes made. Discard?')) {
+        if (this.filesService.currentFile &&
+            this.filesService.currentFile.changesMade &&
+            !confirm('Changes made. Discard?')) {
             return;
         }
 

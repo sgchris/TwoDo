@@ -45,5 +45,8 @@
                 </p>
             </div>
         </div>
+        <div #actualContentEl *ngIf="!filesService.files || filesService.files.length == 0"
+            [ngStyle]="{'height': (configService.winHeight - 200)+'px'}"
+            class="card-text alert content-area-empty">Create file using the "new" button</div>
     </div>
 </div>
