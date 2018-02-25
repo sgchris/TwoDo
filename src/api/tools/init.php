@@ -31,7 +31,8 @@ setHeaders();
 /////////////////////////////////////////////////////////////////////////////
 
 // create global variable $db
-function createDbConnection() {
+function createDbConnection()
+{
     global $db;
 
     try {
@@ -58,9 +59,10 @@ function createDbConnection() {
 
 
 // FB authentication - check if already present in the cache
-function getUserFromCache($accessToken) {
+function getUserFromCache($accessToken)
+{
     $fbUser = null;
-    file_put_contents('/tmp/grinotes.log', date('H:i:s')." apcu:".(function_exists('apcu_fetch')?'defined':'missing').". key-value:".(apcu_exists($accessToken)?'exists':'missing')."\n", FILE_APPEND);
+    file_put_contents('/tmp/grinotes.log', date('H:i:s')." apcu:".(function_exists('apcu_fetch')?'defined':'missing').". key-value:".(function_exists('apcu_exists') && apcu_exists($accessToken)?'exists':'missing')."\n", FILE_APPEND);
     if ($accessToken && function_exists('apcu_fetch') && (apcu_exists($accessToken))) {
         $fbUser = apcu_fetch($accessToken, $fetchSuccess);
         if ($fetchSuccess) {
@@ -75,7 +77,8 @@ function getUserFromCache($accessToken) {
 }
 
 // read user data from facebook
-function getUserFromFacebook($accessToken) {
+function getUserFromFacebook($accessToken)
+{
     if ($accessToken) {
         $fb = new \Facebook\Facebook([
             'app_id' => FB_APP_ID,
@@ -115,7 +118,8 @@ function getUserFromFacebook($accessToken) {
 }
 
 
-function setHeaders() {
+function setHeaders()
+{
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Max-Age: 1000');
     header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding');
