@@ -64,6 +64,18 @@ export class FilesListComponent implements OnInit {
         });
     }
 
+    deletePopoverClass() {
+        return 'delete-file-popover';
+    }
+
+    deleteTitle() {
+        return 'Confirmation';
+    }
+
+    deleteMessage(fileName) {
+        return 'Delete "'+fileName+'"?';
+    }
+
     deleteFile(fileId) {
         if (!fileId || !confirm('Delete the file?')) return;
 

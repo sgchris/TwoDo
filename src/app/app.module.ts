@@ -18,6 +18,8 @@ import { PrettyFileSizePipe } from './pretty-file-size.pipe';
 
 import { TopbarComponent } from './topbar/topbar.component';
 
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+
 // FB authentication
 export function getAuthServiceConfigs() {
     let configService = new ConfigService();
@@ -39,7 +41,10 @@ export function getAuthServiceConfigs() {
         BrowserModule,
         HttpClientModule,
         AngularFontAwesomeModule,
-        SocialLoginModule
+        SocialLoginModule,
+        ConfirmationPopoverModule.forRoot({})
+        // with defining defaults:
+        //ConfirmationPopoverModule.forRoot({})
     ],
     providers: [
         CookieService,

@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^5.2.0",
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
+    "angular-confirmation-popover": "^4.1.0",
     "angular-font-awesome": "^3.1.2",
     "angular5-social-login": "^1.0.9",
     "bootstrap": "^4.0.0",
