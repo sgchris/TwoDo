@@ -3,24 +3,26 @@
     <div class="card-body">
         <h4 class="card-title">
             <button type="button" class="btn btn-primary btn-sm float-right" (click)="createFile();" title="Create new file"><i class="fa fa-star"></i> New</button>
-            Files List
+            Notes
         </h4>
     </div>
     <div class="card-text alert bg-light border files-wrapper" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}">
         <div class="card file-wrapper float-left"
                 [ngClass]="{'selected-file': (selectedFileId == file.id)}"
                 *ngFor="let file of filesService.files">
-            <button type="button"
-                mwlConfirmationPopover
-                title="Delete &quot;{{file.name}}&quot;"
+
+            <!-- Delete button -->
+            <button type="button" title="Delete &quot;{{file.name}}&quot;"
                 class="btn btn-link btn-sm delete-file-button"
-                [popoverClass]="deletePopoverClass()"
-                [popoverMessage]="deleteMessage(file.name)"
-                placement="bottom"
-                (confirm)="deleteFile(file.id);">
-            <!-- (cancel)="cancelClicked = true" -->
-                &times;
-            </button>
+                (click)="openDeleteConfirmation = file.id;">&times;</button>
+
+            <!-- Confirmation box -->
+            <div class="delete-file-confirmation-box" *ngIf="openDeleteConfirmation == file.id">
+                <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile(file.id); openDeleteConfirmation == false;">Delete</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="openDeleteConfirmation = false;">Cancel</button>
+            </div>
+
+            <!-- The big file icon  -->
             <div class="file-icon-wrapper" (click)="openFile(file.id)" title="Click to open &quot;{{file.name}}&quot;">
                 <i class="far fa-file-alt fa-8x"></i>
             </div>

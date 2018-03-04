@@ -37,6 +37,17 @@ h4 {
     color: #FFF;
 }
 
+.delete-file-confirmation-box {
+    position: absolute;
+    margin-top: 30px;
+    margin-left: 5px;
+    background: white;
+    padding: 3px;
+    border: 1px solid #AAA;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    border-radius: 5px;
+}
+
 .selected-file {
     background: #DEF;
 }

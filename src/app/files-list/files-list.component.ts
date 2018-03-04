@@ -17,6 +17,8 @@ export class FilesListComponent implements OnInit {
     fileId_renameInProcess = false;
     newFilename = false;
 
+    openDeleteConfirmation = false;
+
     constructor(
         private cookieService: CookieService,
         public filesService: FilesService,
@@ -64,20 +66,8 @@ export class FilesListComponent implements OnInit {
         });
     }
 
-    deletePopoverClass() {
-        return 'delete-file-popover';
-    }
-
-    deleteTitle() {
-        return 'Confirmation';
-    }
-
-    deleteMessage(fileName) {
-        return 'Delete "'+fileName+'"?';
-    }
-
     deleteFile(fileId) {
-        if (!fileId || !confirm('Delete the file?')) return;
+        if (!fileId) return;
 
         this.filesService.deleteFile(fileId);
     }
