@@ -2,6 +2,30 @@ h4 {
     margin-bottom: 0;
 }
 
+.no-files-curtain {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 99998;
+}
+
+.no-files-curtain-popup {
+    position: fixed;
+    width: 30%;
+    background: #FFF;
+    border: 1px solid #AAA;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    left: 35%;
+    right: 35%;
+    top: 30%;
+    min-width: 500px;
+    padding: 10px;
+    z-index: 99999;
+}
+
 .card-body {
     padding: 0.5rem;
 }

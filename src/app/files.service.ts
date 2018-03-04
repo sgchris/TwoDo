@@ -16,6 +16,8 @@ export class FilesService {
 
     // event is emitted upon current file change
     currentFileUpdateEvent: EventEmitter<any> = new EventEmitter();
+    filesLoadedEvent: EventEmitter<any> = new EventEmitter();
+    initialFilesListLoaded = false;
 
     constructor(
         private cookieService: CookieService,
@@ -25,12 +27,16 @@ export class FilesService {
         private metadataService: MetadataService
     ) {
         this._loadFiles();
-        this.authService.authUpdateEvent.subscribe(user => this._loadFiles());
+
+        this.authService.authUpdateEvent.subscribe(user => {
+            this.initialFilesListLoaded = false;
+            this._loadFiles()
+        });
     }
 
     _loadFiles() {
         // load files upon creation
-        this.loadFilesList().then(res => {
+        return this.loadFilesList().then(res => {
             if (res['result'] != 'ok') return false;
 
             if (this.authService.isLoggedIn) {
@@ -43,6 +49,8 @@ export class FilesService {
                 let currentFileId = this.cookieService.get(this.currentFile_keyName);
                 this.loadFileData(currentFileId);
             }
+        }).then(_ => {
+            this.initialFilesListLoaded = true;
         });
     }
 
@@ -106,11 +114,17 @@ export class FilesService {
 
     // load all files from the server
     loadFilesList() {
-        return this.webapi.get('get_files', {}, res => {
+        let promise = this.webapi.get('get_files', {}, res => {
             if (res['result'] == 'ok') {
                 this.files = res['files'];
             }
         });
+
+        promise.then(res => {
+            this.filesLoadedEvent.emit(this.files);
+        });
+
+        return promise;
     }
 
     setCurrentFileId(fileId) {

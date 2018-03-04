@@ -1,3 +1,16 @@
+<!-- Popup appears when no files are in the list -->
+<div class="no-files-curtain" *ngIf="filesService.initialFilesListLoaded && filesService.files.length == 0">
+    <div class="no-files-curtain-popup">
+        <h3>Create your first note</h3>
+        <br />
+        <p>How will you call it?</p>
+        <form (submit)="$event.preventDefault(); createFile(firstNoteName);">
+            <input type="text" class="form-control" (input)="firstNoteName = $event.target.value;" placeholder="My first note" autofocus="true" value="{{firstNoteName}}"/><br />
+            <button type="submit" class="btn btn-primary"><i class="fa fa-star"></i> Create</button>
+        </form>
+    </div>
+</div>
+
 <br  />
 <div class="card">
     <div class="card-body">

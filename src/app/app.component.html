@@ -3,6 +3,7 @@
 
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="container-fluid" *ngIf="twodoAuthService.isLoggedIn">
+    <!-- The two panels -->
     <div class="row">
         <div class="col col-md-6 col-sm-12">
             <app-editor [fileId]="selectedFileId"></app-editor>
@@ -13,6 +14,7 @@
     </div>
 </div>
 
+<!-- not authenticated secion -->
 <div  *ngIf="!twodoAuthService.isLoggedIn">
     <div class="container-fluid">
         <div class="row">
@@ -69,6 +71,8 @@
     <br />
     <br />
 
+
+    <!-- Footer -->
     <nav class="navbar sticky-bottom navbar-dark bg-dark fixed-bottom">
         <small><a href="mailto:grinotes.com@gmail.com" style="color:#FFF;">grinotes.com@gmail.com</a></small>
     </nav>

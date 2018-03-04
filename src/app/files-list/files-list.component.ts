@@ -19,6 +19,8 @@ export class FilesListComponent implements OnInit {
 
     openDeleteConfirmation = false;
 
+    firstNoteName = 'My Note #1';
+
     constructor(
         private cookieService: CookieService,
         public filesService: FilesService,
@@ -48,8 +50,11 @@ export class FilesListComponent implements OnInit {
         this.fileId_renameInProcess = false;
     }
 
-    createFile() {
-        let newFileName = prompt('New file name');
+    createFile(newFileName?) {
+        if (!newFileName) {
+            newFileName = prompt('New file name');
+        }
+
         if (!newFileName) return;
 
         this.filesService.createFile(newFileName);
