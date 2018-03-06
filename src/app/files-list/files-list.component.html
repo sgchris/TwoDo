@@ -20,13 +20,18 @@
                     Notes
                 </div>
                 <div class="col-6">
-                    <span class="ml-auto mr-4">&nbsp;</span>
-                    <form class="form-inline" style="display: inline-block;">
-                        <input type="text" class="form-control form-control-sm" />
-                        <button class="btn btn-primary btn-sm" type="submit">Create</button>
-                        <button class="btn btn-outline-secondary btn-sm" type="button">Cancel</button>
+                    <form *ngIf="createNewFileFormOpened" class="form-inline form-inline-fix float-right" (submit)="$event.preventDefault(); createFile(newNoteName);">
+                        <input type="text" #createNewFileInput class="form-control form-control-sm" [value]="newNoteName" (input)="newNoteName = $event.target.value;" />
+                        <button class="btn btn-primary btn-sm" type="submit" title="Create new file">Create</button>
+                        <button class="btn btn-outline-secondary btn-sm" type="button" (click)="createNewFileFormOpened = false;">Cancel</button>
                     </form>
-                    <button type="button" class="btn btn-primary btn-sm" (click)="createFile();" title="Create new file"><i class="fa fa-star"></i> New</button>
+                    <button *ngIf="!createNewFileFormOpened"
+                        type="button"
+                        class="btn btn-primary btn-sm float-right"
+                        (click)="openCreateNewFileForm();"
+                        title="Create new file">
+                        <i class="fa fa-star"></i> New
+                    </button>
                 </div>
             </div>
         </h4>

@@ -11,15 +11,19 @@ import { ConfigService } from '../config.service';
 export class FilesListComponent implements OnInit {
     @Output() fileSelected = new EventEmitter<any>();
 
+    @ViewChild('createNewFileInput') createNewFileInput:ElementRef;
+
     files = [];
     selectedFileId = false;
 
     fileId_renameInProcess = false;
-    newFilename = false;
+    newFilename = '';
 
     openDeleteConfirmation = false;
+    createNewFileFormOpened = false;
 
     firstNoteName = 'My Note #1';
+    newNoteName = 'new note name';
 
     constructor(
         private cookieService: CookieService,
@@ -27,13 +31,25 @@ export class FilesListComponent implements OnInit {
         public configService: ConfigService
     ) {
 
-
     }
 
     ngOnInit() {
         this.filesService.currentFileUpdateEvent.subscribe(selectedFile => {
             this.selectedFileId = selectedFile.data.id;
         });
+    }
+
+    generateRandomName() {
+        return 'My note ' + Math.round(Math.random() * 99999 + 10000);
+    }
+
+    openCreateNewFileForm() {
+        this.createNewFileFormOpened = true;
+        setTimeout(_ => {
+            this.newNoteName = this.generateRandomName();
+            this.createNewFileInput.nativeElement.focus();
+            this.createNewFileInput.nativeElement.select();
+        })
     }
 
     openFile(fileId) {
@@ -50,14 +66,20 @@ export class FilesListComponent implements OnInit {
         this.fileId_renameInProcess = false;
     }
 
-    createFile(newFileName?) {
-        if (!newFileName) {
-            newFileName = prompt('New file name');
+    createFile(fileName?) {
+        if (!fileName) {
+            fileName = prompt('New file name');
         }
 
-        if (!newFileName) return;
+        if (!fileName) return;
 
-        this.filesService.createFile(newFileName);
+        this.filesService.createFile(fileName).then(res => {
+            // close the form
+            this.createNewFileFormOpened = false
+
+            // open the newly created file
+            this.openFile(res['file_id']);
+        });
     }
 
     // rename a file, and reload the list
