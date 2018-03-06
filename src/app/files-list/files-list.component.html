@@ -15,8 +15,20 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">
-            <button type="button" class="btn btn-primary btn-sm float-right" (click)="createFile();" title="Create new file"><i class="fa fa-star"></i> New</button>
-            Notes
+            <div class="row">
+                <div class="col-6">
+                    Notes
+                </div>
+                <div class="col-6">
+                    <span class="ml-auto mr-4">&nbsp;</span>
+                    <form class="form-inline" style="display: inline-block;">
+                        <input type="text" class="form-control form-control-sm" />
+                        <button class="btn btn-primary btn-sm" type="submit">Create</button>
+                        <button class="btn btn-outline-secondary btn-sm" type="button">Cancel</button>
+                    </form>
+                    <button type="button" class="btn btn-primary btn-sm" (click)="createFile();" title="Create new file"><i class="fa fa-star"></i> New</button>
+                </div>
+            </div>
         </h4>
     </div>
     <div class="card-text alert bg-light border files-wrapper" [ngStyle]="{'height': (configService.winHeight - 160)+'px'}">
