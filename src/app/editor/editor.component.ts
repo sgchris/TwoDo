@@ -16,10 +16,8 @@ export class EditorComponent implements OnInit {
     // inputs
     @Input('fileId') fileId;
 
-
     // local vars
     filename = 'Unnamed'
-
 
     // 0 - latest, N - N versions back
     currentVersion = 0;
@@ -30,7 +28,6 @@ export class EditorComponent implements OnInit {
         public configService: ConfigService,
         public filesService: FilesService
     ) {
-
     }
 
     ngOnInit() {
@@ -48,15 +45,6 @@ export class EditorComponent implements OnInit {
                 this.actualContentEl.nativeElement.focus();
             }
         });
-    }
-
-    // bind Ctrl-S as save
-    contentKeyPress(evt) {
-        // Ctrl-S
-        if (evt.ctrlKey && evt.key == 's') {
-            evt.preventDefault();
-            this.saveFile();
-        }
     }
 
     _loadFileAtCurrentVersion() {
@@ -118,17 +106,28 @@ export class EditorComponent implements OnInit {
         this._loadFileAtCurrentVersion();
     }
 
-
+    // when editor content changes
+    onChangeCallback() {
+        if (this.filesService.currentFile) {
+            this.filesService.currentFile.changesMade = true;
+        }
+    }
 
     saveFile() {
         if (!this.filesService.currentFile) {
             return;
         }
 
-        if (!this.filesService.currentFile.changesMade) return;
+        if (!this.filesService.currentFile.changesMade) {
+            return;
+        }
 
         // prepare the new content
-        const newContent = this.actualContentEl.nativeElement.innerHTML;
+        const newContent = this.filesService.currentFile.data.content;
+        if (newContent === false) {
+            alert('Cannot get data from the editor');
+            return;
+        }
 
         this.filesService.updateFileContent(newContent).then(res => {
             if (res['result'] == 'ok') {

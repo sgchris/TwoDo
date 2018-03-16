@@ -12,7 +12,7 @@ export class FilesService {
 
     // all the files are stored here
     files = [];
-    currentFile;
+    public currentFile;
 
     // event is emitted upon current file change
     currentFileUpdateEvent: EventEmitter<any> = new EventEmitter();
