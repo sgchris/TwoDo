@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModel } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './config.service';
 import { WebapiService } from './webapi.service';
@@ -19,6 +20,7 @@ import { PrettyFileSizePipe } from './pretty-file-size.pipe';
 import { TopbarComponent } from './topbar/topbar.component';
 
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { GrickeditorDirective } from './grickeditor.directive';
 
 // FB authentication
 export function getAuthServiceConfigs() {
@@ -35,7 +37,8 @@ export function getAuthServiceConfigs() {
         EditorComponent,
         FilesListComponent,
         PrettyFileSizePipe,
-        TopbarComponent
+        TopbarComponent,
+        GrickeditorDirective
     ],
     imports: [
         BrowserModule,

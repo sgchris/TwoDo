@@ -53,14 +53,19 @@
         </h4>
     </div>
     <!-- FULL! editor with content -->
+    <!--
+        contenteditable="true"
+    -->
     <div #actualContentEl *ngIf="filesService.currentFile"
+        style="height:300px;"
+        appGrickeditor
+        [content]="filesService.currentFile.data.content"
         class="card-text alert border file-content-area"
         [ngClass]="{'right-to-left': filesService.currentFile.hasHebrewLetters}"
         (window:keydown)="contentKeyPress($event)"
-        contenteditable="true"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
         [innerHTML]="filesService.currentFile.data.content"
-        (input)="filesService.currentFile.changesMade = true"></div>
+        (input)="filesService.currentFile.changesMade = true; console.log('input');"></div>
     <!-- EMPTY! placeholder when file is not selected -->
     <div #actualContentEl *ngIf="!filesService.currentFile"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
