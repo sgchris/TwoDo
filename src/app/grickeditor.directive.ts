@@ -50,7 +50,18 @@ export class GrickeditorDirective {
 
     constructor(private el: ElementRef) {
         // initialize
-        this.editor = CKEDITOR.replace(el.nativeElement);
+
+        this.editor = CKEDITOR.replace(el.nativeElement, {
+            toolbar:[
+                { name: 'styles', items: [ 'Styles', 'Format', 'Source' ] },
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+                { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'Undo', 'Redo' ] },
+                { name: 'links', items: [ 'Link', 'Unlink' ] },
+                { name: 'insert', items: [ 'Image' ] },
+                { name: 'paragraph', items: [ 'BulletedList', 'Blockquote' ] },
+                { name: 'tools', items: [ 'Maximize' ] }
+            ]
+        });
 
         // set the initial data
         this.editor.setData(this.content);
