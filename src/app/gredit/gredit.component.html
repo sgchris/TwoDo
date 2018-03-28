@@ -1,0 +1,24 @@
+<div #greditWrapper class="wrapper">
+    <div class="toolbar">
+        <ul>
+            <li (mousedown)="$event.preventDefault(); doBold();" title="Bold"><i class="fas fa-bold"></i></li>
+            <li (mousedown)="$event.preventDefault(); doItalic();" title="Italic"><i class="fas fa-italic"></i></li>
+            <li (mousedown)="$event.preventDefault(); doUnderline();" title="Underline"><i class="fas fa-underline"></i></li>
+
+            <li>-</li>
+
+            <li (mousedown)="$event.preventDefault(); doCut();" title="Cut"><i class="fas fa-cut"></i></li>
+            <li (mousedown)="$event.preventDefault(); doCopy();" title="Copy"><i class="fas fa-copy"></i></li>
+            <li (mousedown)="$event.preventDefault(); doPaste();" title="Paste"><i class="fas fa-paste"></i></li>
+
+            <li>-</li>
+
+            <li (mousedown)="$event.preventDefault(); doLink();" title="Make link"><i class="fas fa-link"></i></li>
+            <li (mousedown)="$event.preventDefault(); doUnlink();" title="Unlink"><i class="fas fa-unlink"></i></li>
+        </ul>
+    </div>
+    <div class="content"
+        contenteditable="true"
+        [ngStyle]="{'height': height+'px'}"
+    >{{content}}</div>
+</div>

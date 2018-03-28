@@ -61,6 +61,9 @@
         (input)="filesService.currentFile.changesMade = true; console.log('input');"
         class="card-text alert border file-content-area"
     -->
+    <app-gredit *ngIf="filesService.currentFile"
+        [(content)]="filesService.currentFile.content" height="300"></app-gredit>
+    <!--
     <div #actualContentEl *ngIf="filesService.currentFile"
         appGrickeditor
         [(content)]="filesService.currentFile.data.content"
@@ -68,8 +71,10 @@
         (onChange)="onChangeCallback()"
         [height]="configService.winHeight - 160"
     ></div>
+    -->
     <!-- EMPTY! placeholder when file is not selected -->
-    <div #actualContentEl *ngIf="!filesService.currentFile"
+    <!-- <div #actualContentEl *ngIf="!filesService.currentFile"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
         class="card-text alert border file-content-area content-area-empty">Content goes here</div>
+    -->
 </div>

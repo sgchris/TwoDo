@@ -1,0 +1,35 @@
+.wrapper {
+    border: 1px solid #DDD;
+}
+
+.toolbar {
+    background: #F6F7F6;
+    height: 30px;
+}
+
+.toolbar ul {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    list-style: none;
+}
+
+.toolbar li {
+    color: #888;
+    float: left;
+    box-sizing: border-box;
+    height: 30px;
+    line-height: 30px;
+    width: 30px;
+    text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.toolbar li:hover {
+    color: #333;
+}
+
+.content {
+    padding: 8px;
+}

@@ -21,6 +21,7 @@ import { TopbarComponent } from './topbar/topbar.component';
 
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 import { GrickeditorDirective } from './grickeditor.directive';
+import { GreditComponent } from './gredit/gredit.component';
 
 // FB authentication
 export function getAuthServiceConfigs() {
@@ -38,7 +39,8 @@ export function getAuthServiceConfigs() {
         FilesListComponent,
         PrettyFileSizePipe,
         TopbarComponent,
-        GrickeditorDirective
+        GrickeditorDirective,
+        GreditComponent
     ],
     imports: [
         BrowserModule,
