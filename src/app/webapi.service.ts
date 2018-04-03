@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
-import { TwodoAuthService } from './twodo-auth.service';
+import { GrinotesAuthService } from './grinotes-auth.service';
 
 @Injectable()
 export class WebapiService {
@@ -11,7 +11,7 @@ export class WebapiService {
     constructor(
         private http: HttpClient,
         private configService: ConfigService,
-        private authService: TwodoAuthService
+        private authService: GrinotesAuthService
     ) { }
 
     // GET requests

@@ -2,12 +2,12 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfigService } from './config.service';
 import { WebapiService } from './webapi.service';
-import { TwodoAuthService } from './twodo-auth.service';
+import { GrinotesAuthService } from './grinotes-auth.service';
 import { MetadataService } from './metadata.service';
 
 @Injectable()
 export class FilesService {
-    readonly currentFile_keyName = 'twodo_selected_file_id';
+    readonly currentFile_keyName = 'grinotes_selected_file_id';
     readonly hebrewLetters = 'אבגדהוזחטיכךלמםנןסעפףצץקרשת';
 
     // all the files are stored here
@@ -23,7 +23,7 @@ export class FilesService {
         private cookieService: CookieService,
         private configService: ConfigService,
         private webapi: WebapiService,
-        private authService: TwodoAuthService,
+        private authService: GrinotesAuthService,
         private metadataService: MetadataService
     ) {
         this._loadFiles();

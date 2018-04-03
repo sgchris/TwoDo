@@ -8,7 +8,7 @@ import { WebapiService } from './webapi.service';
 import { MetadataService } from './metadata.service';
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider } from "angular5-social-login";
 import { FilesService } from './files.service';
-import { TwodoAuthService } from './twodo-auth.service';
+import { GrinotesAuthService } from './grinotes-auth.service';
 
 import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
@@ -57,7 +57,7 @@ export function getAuthServiceConfigs() {
         WebapiService,
         MetadataService,
         FilesService,
-        TwodoAuthService,
+        GrinotesAuthService,
         {
             provide: AuthServiceConfig,
             useFactory: getAuthServiceConfigs

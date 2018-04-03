@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TwodoAuthService } from './../twodo-auth.service'
+import { GrinotesAuthService } from './../grinotes-auth.service'
 import { WebapiService } from './../webapi.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { WebapiService } from './../webapi.service';
 export class TopbarComponent implements OnInit {
 
     constructor(
-        public twodoAuthService: TwodoAuthService,
+        public grinotesAuthService: GrinotesAuthService,
         public webapi: WebapiService
     ) { }
 
@@ -19,11 +19,11 @@ export class TopbarComponent implements OnInit {
     }
 
     login() {
-        this.twodoAuthService.login();
+        this.grinotesAuthService.login();
     }
 
     logout() {
-        this.twodoAuthService.logout();
+        this.grinotesAuthService.logout();
     }
 
 }

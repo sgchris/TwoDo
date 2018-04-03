@@ -3,7 +3,7 @@
 require_once __DIR__.'/../../../vendor/autoload.php';
 require_once __DIR__.'/functions.php';
 
-// facebook TwoDo app data
+// facebook GriNotes app data
 $config = parse_ini_file(__DIR__.'/config.ini');
 define('FB_APP_ID', $config['FB_APP_ID']);
 define('FB_APP_SECRET', $config['FB_APP_SECRET']);

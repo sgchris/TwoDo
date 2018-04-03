@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TwodoAuthService } from './twodo-auth.service'
+import { GrinotesAuthService } from './grinotes-auth.service'
 
 @Component({
   selector: 'app-root',
@@ -7,12 +7,12 @@ import { TwodoAuthService } from './twodo-auth.service'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    title = 'TwoDo';
+    title = 'GriNotes';
 
     // param to "editor" component
     selectedFileId = false;
 
-    constructor(public twodoAuthService: TwodoAuthService) { }
+    constructor(public grinotesAuthService: GrinotesAuthService) { }
 
     fileSelected(fileSelected) {
         this.selectedFileId = fileSelected;

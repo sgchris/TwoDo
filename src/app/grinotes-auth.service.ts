@@ -3,7 +3,7 @@ import { AuthService } from "angular5-social-login";
 import { FacebookLoginProvider } from "angular5-social-login";
 
 @Injectable()
-export class TwodoAuthService {
+export class GrinotesAuthService {
     user;
     accessToken;
     isLoggedIn = false;

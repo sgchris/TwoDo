@@ -2,7 +2,7 @@
 <app-topbar></app-topbar>
 
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="container-fluid" *ngIf="twodoAuthService.isLoggedIn">
+<div class="container-fluid" *ngIf="grinotesAuthService.isLoggedIn">
     <!-- The two panels -->
     <div class="row">
         <div class="col col-md-6 col-sm-12">
@@ -15,7 +15,7 @@
 </div>
 
 <!-- not authenticated secion -->
-<div  *ngIf="!twodoAuthService.isLoggedIn">
+<div  *ngIf="!grinotesAuthService.isLoggedIn">
     <div class="container-fluid">
         <div class="row">
             <div class="col col-sm-12 promo-wrapper">
@@ -29,7 +29,7 @@
                             <div>
                                 <button type="button"
                                     class="btn btn-primary"
-                                    (click)="twodoAuthService.login();"><i class="fab fa-facebook"></i> Login with Facebook</button>
+                                    (click)="grinotesAuthService.login();"><i class="fab fa-facebook"></i> Login with Facebook</button>
                             </div>
                             <small>one more click and you're in!</small>
                         </div>
