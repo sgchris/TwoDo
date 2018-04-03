@@ -17,8 +17,12 @@
             <li (mousedown)="$event.preventDefault(); doUnlink();" title="Unlink"><i class="fas fa-unlink"></i></li>
         </ul>
     </div>
-    <div class="content"
+    <div #greditContent
+        class="content"
         contenteditable="true"
         [ngStyle]="{'height': height+'px'}"
-    >{{content}}</div>
+        (input)="changeOccurred()"
+        (keydown)="doKeyDown($event);"
+        [innerHTML]="_content"
+    ></div>
 </div>

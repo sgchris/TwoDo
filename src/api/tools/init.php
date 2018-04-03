@@ -36,7 +36,7 @@ function createDbConnection()
     global $db;
 
     try {
-        $dbFilePath = __DIR__.'/../twodo.db';
+        $dbFilePath = __DIR__.'/../grinotes.db';
         if (!file_exists($dbFilePath)) {
             _exit('DB file does not exist');
         }

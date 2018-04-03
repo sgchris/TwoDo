@@ -13,7 +13,6 @@ export class TwodoAuthService {
 
     constructor(private fbAuthService: AuthService) {
         this.fbAuthService.authState.subscribe((user) => {
-            console.log('user', user);
             this.user = user;
             this.isLoggedIn = (user != null);
             this.accessToken = user ? user.token : false;

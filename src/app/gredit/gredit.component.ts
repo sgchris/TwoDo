@@ -1,4 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import {
+    Component, OnInit,
+    Input, Output,
+    ViewChild, ElementRef,
+    EventEmitter
+} from '@angular/core';
 
 declare var document: any;
 
@@ -9,12 +14,13 @@ declare var document: any;
 })
 export class GreditComponent implements OnInit {
     protected _height: number = 300;
-    protected _content: string = '';
+    public _content: string = '';
 
     constructor() { }
 
     // elements bindings
     @ViewChild('greditWrapper') greditWrapper: ElementRef;
+    @ViewChild('greditContent') greditContent: ElementRef;
 
     @Input()
     get height() {
@@ -24,41 +30,57 @@ export class GreditComponent implements OnInit {
         this._height = newHeight;
     }
 
-    @Input()
-    get content() {
-        return this._content;
+    @Input('content')
+    set content(newContent) {
+        const currentContent = this.greditContent.nativeElement.innerHTML;
+        if (newContent != currentContent) {
+            this._content = newContent
+            this.greditContent.nativeElement.focus();
+        }
     }
-    set content(newContent: string) {
-        this._content = newContent;
-    }
+    @Output('contentChange') contentChange = new EventEmitter();
+
+    @Output('onSave') onSaveEvent = new EventEmitter();
 
     ngOnInit() {
         // ..
     }
 
+    changeOccurred() {
+        this.contentChange.emit(this.greditContent.nativeElement.innerHTML);
+    }
+
+    doKeyDown(evt) {
+        // check Ctrl-S
+        if (evt.ctrlKey && evt.key == 's') {
+            evt.preventDefault();
+            this.onSaveEvent.emit();
+        }
+    }
+
     doBold() {
-        console.log('exec command', document.execCommand('bold', false, true));
+        document.execCommand('bold', false, true);
     }
     doItalic() {
-        console.log('exec command', document.execCommand('italic', false, true));
+        document.execCommand('italic', false, true);
     }
     doUnderline() {
-        console.log('exec command', document.execCommand('underline', false, true));
+        document.execCommand('underline', false, true);
     }
     doCut() {
-        console.log('exec command', document.execCommand('cut', false, true));
+        document.execCommand('cut', false, true);
     }
     doCopy() {
-        console.log('exec command', document.execCommand('copy', false, true));
+        document.execCommand('copy', false, true);
     }
     doPaste() {
-        console.log('exec command', document.execCommand('paste', false, true));
+        document.execCommand('paste', false, true);
     }
     doLink() {
-        console.log('exec command', document.execCommand('createLink', false, ''+window.getSelection()));
+        document.execCommand('createLink', false, ''+window.getSelection());
     }
     doUnlink() {
-        console.log('exec command', document.execCommand('unlink', false, true));
+        document.execCommand('unlink', false, true);
     }
 
 }
