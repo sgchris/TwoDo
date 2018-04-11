@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
 import { GrinotesAuthService } from './grinotes-auth.service';
 
+declare var AWS;
+
 @Injectable()
 export class WebapiService {
 
@@ -13,6 +15,33 @@ export class WebapiService {
         private configService: ConfigService,
         private authService: GrinotesAuthService
     ) { }
+
+    run(awsLambdaName:string, params = {}, callbackFn = undefined) {
+        if (!this.authService.isAWSLoggedIn) {
+            console.log('not logged in');
+            let currentWebapiService = this;
+            setTimeout(_ => {
+                currentWebapiService.run(awsLambdaName, params, callbackFn);
+            }, 500);
+            return
+        }
+        let lambdaParams = {
+            FunctionName: awsLambdaName,
+            Payload: JSON.stringify({
+                ...params,
+                fbid: this.authService.user.id
+            })
+        };
+        let lambda = new AWS.Lambda();
+        console.log('sending lambda data', lambdaParams);
+        lambda.invoke(lambdaParams, (err, data) => {
+            let response = data && data['Payload'] ? JSON.parse(data['Payload']) : {};
+            console.log('err', err, 'lambda data', data, "data['Payload']", data['Payload']);
+            if (callbackFn) {
+                callbackFn(response);
+            }
+        });
+    }
 
     // GET requests
     get(url, params = {}, callbackFn = undefined) {

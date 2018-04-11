@@ -20,7 +20,7 @@ export class GrinotesAuthService {
             this.isLoggedIn = !!this.user;
             this.accessToken = user ? user.token : false;
 
-            if (this.user && !this.isLoggedIn) {
+            if (this.user && !this.isAWSLoggedIn) {
                 AWS.config.region = 'eu-central-1';
 
                 // Add the Facebook access token to the Cognito credentials login map.
@@ -29,11 +29,16 @@ export class GrinotesAuthService {
                     Logins: {'graph.facebook.com': this.accessToken}
                 });
 
-                this.isAWSLoggedIn = true;
-                /*
-                // Obtain AWS credentials
                 let grinotesAuth = this;
                 AWS.config.credentials.get(_ => {
+                    grinotesAuth.isAWSLoggedIn = true;
+                    
+                    // fire event forward
+                    grinotesAuth.authUpdateEvent.emit(grinotesAuth.user);
+                });
+                
+                /*
+                // Obtain AWS credentials
                     grinotesAuth.isAWSLoggedIn = true;
                     // Access AWS resources here.
                     let params = {
@@ -50,9 +55,6 @@ export class GrinotesAuthService {
                 });
                 */
             }
-
-            // fire event forward
-            this.authUpdateEvent.emit(this.user);
         });
     }
 

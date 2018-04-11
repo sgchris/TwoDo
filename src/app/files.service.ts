@@ -114,16 +114,22 @@ export class FilesService {
 
     // load all files from the server
     loadFilesList() {
-        let promise = this.webapi.get('get_files', {}, res => {
-            if (res['result'] == 'ok') {
-                this.files = res['files'];
-            }
+        let that = this;
+        let promise = new Promise((resolve, reject) => {
+            that.webapi.run('grinotes_get_files', {}, res => {
+                if (res['result'] == 'ok') {
+                    that.files = res['files'];
+                    resolve(that.files);
+                } else {
+                    reject();
+                }
+            });
         });
-
+        
         promise.then(res => {
-            this.filesLoadedEvent.emit(this.files);
+            that.filesLoadedEvent.emit(that.files);
         });
-
+        
         return promise;
     }
 

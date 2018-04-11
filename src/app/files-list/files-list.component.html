@@ -3,7 +3,12 @@
     <div class="no-files-curtain-popup">
         <h3>Create your first note</h3>
         <br />
-        <p>How will you call it?</p>
+        <p>Notes are those small and wonderful things that help you write down your thoughts, remembers things,<br/>
+            manage tasks, pass imformation between devices, keep links or even some images.<br />
+            <br/>
+            It seems like you haven't created one yet :(, let's do it together now. <br />
+            <br />
+            How shall you call your first note? (e.g. My tasks, movies)</p>
         <form (submit)="$event.preventDefault(); createFile(firstNoteName);">
             <input type="text" class="form-control" (input)="firstNoteName = $event.target.value;" placeholder="My first note" autofocus="true" value="{{firstNoteName}}"/><br />
             <button type="submit" class="btn btn-primary"><i class="fa fa-star"></i> Create</button>

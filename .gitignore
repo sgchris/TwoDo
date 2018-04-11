@@ -11,6 +11,8 @@
 
 # config files
 /src/api/tools/config.ini
+/src/aws/lambda/grinotes_add_file/lambda/db_creds.py
+/src/aws/lambda/grinotes_get_files/lambda/db_creds.py
 
 # php libs
 vendor
