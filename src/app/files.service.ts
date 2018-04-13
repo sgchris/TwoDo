@@ -125,11 +125,11 @@ export class FilesService {
                 }
             });
         });
-        
+
         promise.then(res => {
             that.filesLoadedEvent.emit(that.files);
         });
-        
+
         return promise;
     }
 
@@ -187,6 +187,27 @@ export class FilesService {
 
     // create new file
     createFile(newFileName) {
+        let that = this;
+        let promise = new Promise((resolve, reject) => {
+            that.webapi.run('grinotes_add_file', {}, res => {
+                if (res['result'] == 'ok') {
+                    // add the new file to the list
+                    that.files.push({
+                        id: res['file_id'],
+                        name: newFileName
+                    });
+                    resolve(that.files);
+                } else {
+                    reject();
+                }
+            });
+        });
+
+        promise.then(res => {
+            that.filesLoadedEvent.emit(that.files);
+        });
+
+        return promise;
         return this.webapi.post('add_file', { name: newFileName }, res => {
             if (res['result'] == 'ok') {
                 // add the new file to the list

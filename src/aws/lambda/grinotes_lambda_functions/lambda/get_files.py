@@ -2,6 +2,7 @@ import sys
 import json
 import logging
 from tools import db
+from tools import helpers
 import pymysql
 
 def lambda_handler(event, context):
@@ -14,6 +15,13 @@ def lambda_handler(event, context):
     # receive parameters
     fbid = event['fbid']
 
+    # get user
+    userObj = helpers.getUser(fbid)
+    if not userObj:
+        return helpers._error('user not found')
+
+    userId = userObj['id']
+
     filesList = db.dbQuery(
         'SELECT f.id, f.name, LENGTH(fv.content) as size '+
         'FROM files f ' +
@@ -21,7 +29,7 @@ def lambda_handler(event, context):
         'WHERE f.user_id = %s '+
         'GROUP BY f.id '+
         'ORDER BY f.date_created ASC, fv.date_created DESC',
-        fbid
+        userId
     )
 
     return {'result':'ok', 'files':filesList}

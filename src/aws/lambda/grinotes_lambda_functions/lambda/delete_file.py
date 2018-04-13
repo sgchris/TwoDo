@@ -13,12 +13,12 @@ def lambda_handler(event, context):
     """
 
     # receive parameters
-    name = event['name']
+    file_id = event['file_id']
     fbid = event['fbid']
 
     # validate params
-    if not name or len(name) == 0:
-        return helpers._error('name was not provided')
+    if not file_id or len(file_id) == 0:
+        return helpers._error('file_id was not provided')
     if not fbid or len(fbid) == 0:
         return helpers._error('facebook id was not provided')
 
@@ -30,15 +30,14 @@ def lambda_handler(event, context):
     userId = userObj['id']
 
     # check if the file already exists
-    file = db.dbRow('SELECT id FROM files WHERE name LIKE %s AND user_id = %s',
-        '%'+name+'%', userId
+    file = db.dbRow('SELECT id FROM files WHERE id = %s AND user_id = %s',
+        file_id, userId
     )
-    if file:
-        return helpers._error('file with this name already exists')
+    if not file:
+        return helpers._error('file not found')
 
     # insert new file to the DB
-    lastInserId = db.dbExec('INSERT INTO files (name, user_id, date_created) VALUES (%s, %s, %s)',
-        name, userId, time.time()
-    )
+    db.dbExec('DELETE FROM files WHERE id = %s', file_id)
+    db.dbExec('DELETE FROM files_versions WHERE file_id = %s', file_id)
 
-    return helpers._success({"file_id": lastInserId})
+    return helpers._success()
