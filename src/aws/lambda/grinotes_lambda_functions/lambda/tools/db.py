@@ -1,24 +1,26 @@
+import sys
 import logging
-import db_creds
 import pymysql
+import db_creds
 
 def getLogger():
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     return logger
-    
+
 
 def dbConnect():
-	try: 
-		conn = pymysql.connect(
-			db_host, user=db_username, passwd=db_password, db=db_name, 
+	try:
+		conn = pymysql.connect(db_creds.db_host,
+            user=db_creds.db_username, passwd=db_creds.db_password,
+            db=db_creds.db_name,
 			connect_timeout=5,
 			cursorclass=pymysql.cursors.DictCursor
 		)
 
 		return conn
 	except Exception as e:
-		logger.error("Connection error! " + str(e))
+		getLogger().error("Connection error! " + str(e))
 		sys.exit()
 
 	return False
@@ -32,14 +34,14 @@ def dbRow(sql, *params):
 		result = cur.fetchone()
 
 	except Exception as e:
-		logger.error("dbRow error! " + str(e))
+		getLogger().error("dbRow error! " + str(e))
 		sys.exit()
 
 	finally:
 		conn.close()
 
 	return result
-	
+
 
 def dbQuery(sql, *params):
 	""" query rows from the DB """
@@ -50,12 +52,12 @@ def dbQuery(sql, *params):
 		result = cur.fetchall()
 
 	except Exception as e:
-		logger.error("dbQuery error! " + str(e))
+		getLogger().error("dbQuery error! " + str(e))
 		sys.exit()
 
 	finally:
 		conn.close()
-	
+
 	return result
 
 
@@ -65,15 +67,12 @@ def dbExec(sql, *params):
 	try:
 		cur = conn.cursor()
 		cur.execute(sql, params)
-		result = cur.fetchall()
-
 	except Exception as e:
-		print 'Execution error! ' + str(e)
+		getLogger().error('Execution error! ' + str(e))
 		sys.exit()
 
 	finally:
 		conn.commit()
 		conn.close()
-	
-	return result
 
+	return True
