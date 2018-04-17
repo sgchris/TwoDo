@@ -133,7 +133,7 @@ export class FilesService {
         return promise;
     }
 
-    setCurrentFileId(fileId) {
+    setCurrentFileId(fileId) { 
         let loadFileSucceeded = this.loadFileData(fileId)
         if (loadFileSucceeded) {
             loadFileSucceeded.then(res => {
@@ -189,7 +189,7 @@ export class FilesService {
     createFile(newFileName) {
         let that = this;
         let promise = new Promise((resolve, reject) => {
-            that.webapi.run('grinotes_add_file', {}, res => {
+            that.webapi.run('grinotes_add_file', {name: newFileName}, res => {
                 if (res['result'] == 'ok') {
                     // add the new file to the list
                     that.files.push({
@@ -203,51 +203,44 @@ export class FilesService {
             });
         });
 
-        promise.then(res => {
-            that.filesLoadedEvent.emit(that.files);
-        });
-
         return promise;
-        return this.webapi.post('add_file', { name: newFileName }, res => {
-            if (res['result'] == 'ok') {
-                // add the new file to the list
-                this.files.push({
-                    id: res['file_id'],
-                    name: newFileName
-                });
-            }
-        });
     }
 
     deleteFile(fileId) {
-        return this.webapi.post('delete_file', { file_id: String(fileId) }, res => {
-            if (res['result'] == 'ok') {
+        let that = this;
+        console.log('fileId', fileId);
+        let promise = new Promise((resolve, reject) => {
+            that.webapi.run('grinotes_delete_file', {file_id: fileId}, res => {
+                if (res['result'] == 'ok') {
 
-                // remove the file from the local list
-                let theFileIndex = -1;
-                for (let i in this.files) {
-                    if (this.files[i].id == fileId) {
-                        theFileIndex = Number(i);
-                        this.files.splice(theFileIndex, 1);
-                        break;
+                    // remove the file from the local list
+                    let theFileIndex = -1;
+                    for (let i in that.files) {
+                        if (that.files[i].id == fileId) {
+                            theFileIndex = Number(i);
+                            that.files.splice(theFileIndex, 1);
+                            break;
+                        }
+                    }
+
+                    // check if current file deleted
+                    if (that.currentFile.data.id == fileId) {
+                        if (theFileIndex > 0) {
+                            // load one file before
+                            that.setCurrentFileId(that.files[theFileIndex - 1].id);
+                        } else if (that.files.length > 0) {
+                            // load the first file
+                            that.setCurrentFileId(that.files[0].id);
+                        } else {
+                            // don't load file
+                            that.setCurrentFileId(0);
+                        }
                     }
                 }
-
-                // check if current file deleted
-                if (this.currentFile.data.id == fileId) {
-                    if (theFileIndex > 0) {
-                        // load one file before
-                        this.setCurrentFileId(this.files[theFileIndex - 1].id);
-                    } else if (this.files.length > 0) {
-                        // load the first file
-                        this.setCurrentFileId(this.files[0].id);
-                    } else {
-                        // don't load file
-                        this.setCurrentFileId(0);
-                    }
-                }
-            }
+            });
         });
+
+        return promise;
     }
 
 }

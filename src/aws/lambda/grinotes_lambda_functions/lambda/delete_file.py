@@ -17,7 +17,7 @@ def lambda_handler(event, context):
     fbid = event['fbid']
 
     # validate params
-    if not file_id or len(file_id) == 0:
+    if not file_id:
         return helpers._error('file_id was not provided')
     if not fbid or len(fbid) == 0:
         return helpers._error('facebook id was not provided')

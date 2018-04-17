@@ -64,9 +64,14 @@ def dbQuery(sql, *params):
 def dbExec(sql, *params):
 	""" execute query to the DB """
 	conn = dbConnect()
+	result = True
 	try:
 		cur = conn.cursor()
 		cur.execute(sql, params)
+		
+		if sql.lower().startswith('insert'):
+			result = cur.lastrowid
+			
 	except Exception as e:
 		getLogger().error('Execution error! ' + str(e))
 		sys.exit()
@@ -75,4 +80,4 @@ def dbExec(sql, *params):
 		conn.commit()
 		conn.close()
 
-	return True
+	return result

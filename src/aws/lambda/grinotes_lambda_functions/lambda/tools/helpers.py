@@ -1,10 +1,8 @@
 import db
 
 
-def _success(obj):
+def _success(obj = {}):
     """ Return success object (prepend "result": "ok" to the object) """
-    if not obj:
-        obj = {}
     obj['result'] = 'ok'
     return obj
 
