@@ -5,30 +5,37 @@ import { WebapiService } from './webapi.service';
 export class MetadataService {
 
     constructor(
-        private webapiService: WebapiService
+        private webapi: WebapiService
     ) { }
 
-    get(key:string, callbackFn = undefined) {
-        let promise = this.webapiService.get('get_meta_data', {key});
-        if (callbackFn) {
-            promise.then(res => {
+    get(key:string) {
+        let that = this;
+        let promise = new Promise((resolve, reject) => {
+            that.webapi.run('grinotes_get_metadata', {}, res => {
                 if (res['result'] == 'ok') {
-                    callbackFn(res['value']);
+                    let keyValue = res['metadata'][key] ? res['metadata'][key] : false;
+                    resolve(keyValue);
+                } else {
+                    reject();
                 }
             });
-        }
+        });
+
         return promise;
     }
 
-    set(key:string, value:any, callbackFn = undefined) {
-        let promise = this.webapiService.post('set_meta_data', {key, value})
-        if (callbackFn) {
-            promise.then(res => {
+    set(key:string, value:any) {
+        let that = this;
+        let promise = new Promise((resolve, reject) => {
+            that.webapi.run('grinotes_set_metadata', {key, value}, res => {
                 if (res['result'] == 'ok') {
-                    callbackFn();
+                    resolve();
+                } else {
+                    reject();
                 }
             });
-        }
+        });
+
         return promise;
     }
 }

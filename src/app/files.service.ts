@@ -74,28 +74,36 @@ export class FilesService {
         // // load the file from the server
 
         let params = {
-            'file_id': fileId
+            'fileid': fileId
         };
 
         // add optional version id parameter
         if (versionId != undefined) {
             //params.set('version_id', versionId);
-            params['version_id'] = versionId;
+            params['versionid'] = versionId;
         }
 
-        return this.webapi.get('get_file_data', params, res => {
-            if (res['result'] == 'ok') {
-                this.currentFile = {
-                    'data': res['data'],
-                    'versions': res['versions'],
-                    'version': 0,
-                    'hasHebrewLetters': this._contentHasHebrewLetters(res['data'].content)
-                };
+        let that = this;
+        let promise = new Promise((resolve, reject) => {
+            that.webapi.run('grinotes_get_file', params, res => {
+                if (res['result'] == 'ok') {
+                    that.currentFile = {
+                        'data': res['data'],
+                        'versions': res['versions'],
+                        'version': 0,
+                        'hasHebrewLetters': that._contentHasHebrewLetters(res['data'].content)
+                    };
 
-                // broadcast the change
-                this.currentFileUpdateEvent.emit(this.currentFile);
-            }
+                    // broadcast the change
+                    that.currentFileUpdateEvent.emit(that.currentFile);
+
+                    resolve(that.currentFile);
+                } else {
+                    reject();
+                }
+            });
         });
+        return promise;
     }
 
     // check if the content parameter has hebrew letters
@@ -133,7 +141,7 @@ export class FilesService {
         return promise;
     }
 
-    setCurrentFileId(fileId) { 
+    setCurrentFileId(fileId) {
         let loadFileSucceeded = this.loadFileData(fileId)
         if (loadFileSucceeded) {
             loadFileSucceeded.then(res => {

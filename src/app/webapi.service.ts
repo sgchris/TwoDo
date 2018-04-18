@@ -33,10 +33,19 @@ export class WebapiService {
             })
         };
         let lambda = new AWS.Lambda();
-        console.log('sending lambda data', lambdaParams);
         lambda.invoke(lambdaParams, (err, data) => {
+            if (err) {
+                console.error('err', err);
+                return;
+            }
+
             let response = data && data['Payload'] ? JSON.parse(data['Payload']) : {};
-            console.log('err', err, 'lambda data', data, "data['Payload']", data['Payload']);
+            if (response['result'] != 'ok') {
+                if (response['error']) {
+                    console.error('error', response['error']);
+                }
+            }
+            
             if (callbackFn) {
                 callbackFn(response);
             }
