@@ -85,19 +85,19 @@ export class FilesService {
 
         let that = this;
         let promise = new Promise((resolve, reject) => {
-            that.webapi.run('grinotes_get_file', params, res => {
+            this.webapi.run('grinotes_get_file', params, res => {
                 if (res['result'] == 'ok') {
-                    that.currentFile = {
+                    this.currentFile = {
                         'data': res['data'],
                         'versions': res['versions'],
                         'version': 0,
-                        'hasHebrewLetters': that._contentHasHebrewLetters(res['data'].content)
+                        'hasHebrewLetters': this._contentHasHebrewLetters(res['data'].content)
                     };
 
                     // broadcast the change
-                    that.currentFileUpdateEvent.emit(that.currentFile);
+                    this.currentFileUpdateEvent.emit(this.currentFile);
 
-                    resolve(that.currentFile);
+                    resolve(this.currentFile);
                 } else {
                     reject();
                 }

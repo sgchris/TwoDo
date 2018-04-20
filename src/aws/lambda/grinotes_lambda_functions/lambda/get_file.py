@@ -33,25 +33,27 @@ def lambda_handler(event, context):
 
     # prepare SQL with params
     versionCondition = ""
-    sqlParams = (fileId, userId,)
+    sqlParams = {"file_id":fileId, "user_id":userId}
     if versionId:
-        sqlParams += (versionId,) + sqlParams
-        versionCondition = " AND fv.id = %s "
+        sqlParams['version_id'] = versionId
+        versionCondition = " AND fv.id = %(version_id)s "
 
     sqlString = """
     	SELECT f.id, f.name,
             IFNULL(fv.content, "") as content,
-            IFNULL(fv.date_created, 0) as date_created
+            IFNULL(fv.date_created, 0) as date_created,
+            COUNT(f.id) as total_versions
         FROM files f
             LEFT JOIN files_versions fv
                 ON fv.file_id = f.id """
     sqlString += versionCondition
     sqlString += """
-        WHERE f.id = %s AND f.user_id = %s
-           ORDER BY fv.date_created DESC
+        WHERE f.id = %(file_id)s AND f.user_id = %(user_id)s
+        GROUP BY f.id
+        ORDER BY fv.date_created DESC
         LIMIT 1"""
 
-    fileData = db.dbQuery(sqlString, sqlParams)
+    fileData = db.dbRow(sqlString, sqlParams)
     if not fileData:
         return helpers._error('file not found')
 
@@ -59,7 +61,7 @@ def lambda_handler(event, context):
     versionsList = db.dbQuery("""
         SELECT * FROM files_versions
         WHERE file_id = %s
-        ORDER BY data_created DESC LIMIT 15""",
+        ORDER BY date_created DESC LIMIT 15""",
         fileId
     )
 

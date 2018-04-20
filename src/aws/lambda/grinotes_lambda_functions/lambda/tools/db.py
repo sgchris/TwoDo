@@ -3,17 +3,18 @@ import logging
 import pymysql
 import db_creds
 
+
 def getLogger():
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-    return logger
+	logger = logging.getLogger()
+	logger.setLevel(logging.INFO)
+	return logger
 
 
 def dbConnect():
 	try:
 		conn = pymysql.connect(db_creds.db_host,
-            user=db_creds.db_username, passwd=db_creds.db_password,
-            db=db_creds.db_name,
+			user=db_creds.db_username, passwd=db_creds.db_password,
+			db=db_creds.db_name,
 			connect_timeout=5,
 			cursorclass=pymysql.cursors.DictCursor
 		)
@@ -25,8 +26,13 @@ def dbConnect():
 
 	return False
 
+
 def dbRow(sql, *params):
 	""" query exactly one row from the DB """
+
+	if isinstance(params[0], dict):
+		params = params[0]
+
 	conn = dbConnect()
 	try:
 		cur = conn.cursor()
@@ -45,6 +51,9 @@ def dbRow(sql, *params):
 
 def dbQuery(sql, *params):
 	""" query rows from the DB """
+	if isinstance(params[0], dict):
+		params = params[0]
+
 	conn = dbConnect()
 	try:
 		cur = conn.cursor()
@@ -63,15 +72,18 @@ def dbQuery(sql, *params):
 
 def dbExec(sql, *params):
 	""" execute query to the DB """
+	if isinstance(params[0], dict):
+		params = params[0]
+
 	conn = dbConnect()
 	result = True
 	try:
 		cur = conn.cursor()
 		cur.execute(sql, params)
-		
+
 		if sql.lower().startswith('insert'):
 			result = cur.lastrowid
-			
+
 	except Exception as e:
 		getLogger().error('Execution error! ' + str(e))
 		sys.exit()

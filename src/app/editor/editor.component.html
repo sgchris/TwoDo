@@ -68,7 +68,7 @@
         [height]="configService.winHeight - 202"
         (onSave)="saveFile()"
         (input)="filesService.currentFile.changesMade = true"></app-gredit>
-    
+
     <!-- EMPTY! placeholder when file is not selected -->
     <div #actualContentEl *ngIf="!filesService.currentFile"
         [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
