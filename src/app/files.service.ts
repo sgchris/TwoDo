@@ -14,6 +14,11 @@ export class FilesService {
     files = [];
     public currentFile;
 
+    get _currentFile() {
+        console.log('getting current file');
+        return this.currentFile;
+    }
+
     // event is emitted upon current file change
     currentFileUpdateEvent: EventEmitter<any> = new EventEmitter();
     filesLoadedEvent: EventEmitter<any> = new EventEmitter();
@@ -87,22 +92,23 @@ export class FilesService {
         let promise = new Promise((resolve, reject) => {
             this.webapi.run('grinotes_get_file', params, res => {
                 if (res['result'] == 'ok') {
-                    this.currentFile = {
+                    resolve({
                         'data': res['data'],
                         'versions': res['versions'],
                         'version': 0,
                         'hasHebrewLetters': this._contentHasHebrewLetters(res['data'].content)
-                    };
-
-                    // broadcast the change
-                    this.currentFileUpdateEvent.emit(this.currentFile);
-
-                    resolve(this.currentFile);
+                    });
                 } else {
                     reject();
                 }
             });
         });
+
+        promise.then(currentFileParam => {
+            this.currentFile = currentFileParam;
+            this.currentFileUpdateEvent.emit(currentFileParam);
+        });
+
         return promise;
     }
 
