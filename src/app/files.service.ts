@@ -151,7 +151,8 @@ export class FilesService {
         let loadFileSucceeded = this.loadFileData(fileId)
         if (loadFileSucceeded) {
             loadFileSucceeded.then(res => {
-                if (res['result'] == 'ok') {
+                if (res && res['data']) {
+                    console.log ('metadata service causes troubles');
                     // store the selection in the cookie
                     if (this.authService.isLoggedIn) {
                         this.metadataService.set(this.currentFile_keyName, fileId);
