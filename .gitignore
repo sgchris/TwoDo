@@ -10,9 +10,9 @@
 *.db
 
 # config files
-/src/api/tools/config.ini
-/src/aws/lambda/grinotes_add_file/lambda/db_creds.py
-/src/aws/lambda/grinotes_get_files/lambda/db_creds.py
+src/api/tools/config.ini
+src/aws/lambda/grinotes_lambda_functions/lambda/tools/db_creds.py
+src/aws/lambda/grinotes_lambda_functions/index.zip
 
 # php libs
 vendor
@@ -40,7 +40,6 @@ vendor
 !.vscode/extensions.json
 
 # misc
-/src/aws/lambda/grinotes_lambda_functions/index.zip
 /.sass-cache
 /connect.lock
 /coverage

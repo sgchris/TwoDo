@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     userId = userObj['id']
 
     # check if the file already exists
-    result = db.dbExec('REPLACE INTO metadata (key, value, user_id) values (%s, %s, %s)',
+    result = db.dbExec('REPLACE INTO metadata (`key`, `value`, `user_id`) values (%s, %s, %s)',
         key, value, userId
     )
 

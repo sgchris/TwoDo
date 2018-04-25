@@ -30,7 +30,7 @@ def lambda_handler(event, context):
     userId = userObj['id']
 
     # check if the file already exists
-    row = db.dbRow('SELECT value FROM metadata WHERE key = %s AND user_id = %s',
+    row = db.dbRow('SELECT `value` FROM `metadata` WHERE `key` = %s AND `user_id` = %s',
         key, userId
     )
 
