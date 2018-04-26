@@ -34,7 +34,8 @@ export class GreditComponent implements OnInit {
     set content(newContent) {
         const currentContent = this.greditContent.nativeElement.innerHTML;
         if (newContent != currentContent) {
-            this._content = newContent
+            // set the new content
+            this.greditContent.nativeElement.innerHTML = this._content = newContent;
             this.greditContent.nativeElement.focus();
         }
     }
