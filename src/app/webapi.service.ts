@@ -25,6 +25,7 @@ export class WebapiService {
             }, 500);
             return
         }
+        this.inProgress = true;
         let lambdaParams = {
             FunctionName: awsLambdaName,
             Payload: JSON.stringify({
@@ -33,7 +34,10 @@ export class WebapiService {
             })
         };
         let lambda = new AWS.Lambda();
+        let that = this;
         lambda.invoke(lambdaParams, (err, data) => {
+            this.inProgress = false;
+            
             if (err) {
                 console.error('err', err);
                 return;
@@ -45,7 +49,7 @@ export class WebapiService {
                     console.error('error', response['error']);
                 }
             }
-            
+
             if (callbackFn) {
                 callbackFn(response);
             }

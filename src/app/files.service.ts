@@ -173,9 +173,17 @@ export class FilesService {
             return;
         }
 
-        return this.webapi.post('add_file_version', {
-            file_id: this.currentFile.data.id,
-            content: newContent
+        return new Promise((resolve, reject) => {
+            return this.webapi.run('grinotes_save_file', {
+                fileid: this.currentFile.data.id,
+                content: newContent
+            }, res => {
+                if (res['result'] == 'ok') {
+                    resolve(res);
+                } else {
+                    reject();
+                }
+            });
         });
     }
 

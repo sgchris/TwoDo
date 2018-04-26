@@ -42,17 +42,16 @@ def lambda_handler(event, context):
     	SELECT f.id, f.name,
             IFNULL(fv.content, "") as content,
             IFNULL(fv.date_created, 0) as date_created,
-            COUNT(f.id) as total_versions
+            (select count(*) from `files_versions` where `file_id` = f.id) as total_versions
         FROM files f
             LEFT JOIN files_versions fv
                 ON fv.file_id = f.id """
     sqlString += versionCondition
     sqlString += """
         WHERE f.id = %(file_id)s AND f.user_id = %(user_id)s
-        GROUP BY f.id
         ORDER BY fv.date_created DESC
         LIMIT 1"""
-
+    db.getLogger().info('get file sql' + sqlString)
     fileData = db.dbRow(sqlString, sqlParams)
     if not fileData:
         return helpers._error('file not found')
