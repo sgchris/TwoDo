@@ -11,10 +11,10 @@ export class MetadataService {
     get(key:string) {
         let that = this;
         let promise = new Promise((resolve, reject) => {
-            that.webapi.run('grinotes_get_metadata', {}, res => {
+            that.webapi.run('grinotes_get_metadata', {key}, res => {
+                console.log('grinotes_get_metadata', res);
                 if (res['result'] == 'ok') {
-                    let keyValue = res['metadata'][key] ? res['metadata'][key] : false;
-                    resolve(keyValue);
+                    resolve(res['value']);
                 } else {
                     reject();
                 }

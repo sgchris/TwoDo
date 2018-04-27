@@ -14,11 +14,6 @@ export class FilesService {
     files = [];
     public currentFile;
 
-    get _currentFile() {
-        console.log('getting current file');
-        return this.currentFile;
-    }
-
     // event is emitted upon current file change
     currentFileUpdateEvent: EventEmitter<any> = new EventEmitter();
     filesLoadedEvent: EventEmitter<any> = new EventEmitter();
@@ -31,7 +26,7 @@ export class FilesService {
         private authService: GrinotesAuthService,
         private metadataService: MetadataService
     ) {
-        this._loadFiles();
+        //this._loadFiles();
 
         this.authService.authUpdateEvent.subscribe(user => {
             this.initialFilesListLoaded = false;
@@ -44,11 +39,9 @@ export class FilesService {
         return this.loadFilesList().then(res => {
             if (res['result'] != 'ok') return false;
 
-            if (this.authService.isLoggedIn) {
-                this.metadataService.get(this.currentFile_keyName).then(metaRes => {
-                    // get the last selected file ID
-                    const currentFileId = (metaRes['result'] == 'ok') ? metaRes['value'] : false;
-                    this.loadFileData(currentFileId);
+            if (this.authService.isAWSLoggedIn) {
+                this.metadataService.get(this.currentFile_keyName).then(val => {
+                    this.loadFileData(val)
                 });
             } else {
                 let currentFileId = this.cookieService.get(this.currentFile_keyName);
@@ -133,7 +126,7 @@ export class FilesService {
             that.webapi.run('grinotes_get_files', {}, res => {
                 if (res['result'] == 'ok') {
                     that.files = res['files'];
-                    resolve(that.files);
+                    resolve(res);
                 } else {
                     reject();
                 }
@@ -141,6 +134,11 @@ export class FilesService {
         });
 
         promise.then(res => {
+            // select previously selected file
+            if (!that.currentFile) {
+
+            }
+
             that.filesLoadedEvent.emit(that.files);
         });
 
@@ -152,7 +150,6 @@ export class FilesService {
         if (loadFileSucceeded) {
             loadFileSucceeded.then(res => {
                 if (res && res['data']) {
-                    console.log ('metadata service causes troubles');
                     // store the selection in the cookie
                     if (this.authService.isLoggedIn) {
                         this.metadataService.set(this.currentFile_keyName, fileId);
@@ -212,7 +209,7 @@ export class FilesService {
     createFile(newFileName) {
         let that = this;
         let promise = new Promise((resolve, reject) => {
-            that.webapi.run('grinotes_add_file', {name: newFileName}, res => {
+            that.webapi.run('grinotes_add_file', { name: newFileName }, res => {
                 if (res['result'] == 'ok') {
                     // add the new file to the list
                     that.files.push({
@@ -231,9 +228,8 @@ export class FilesService {
 
     deleteFile(fileId) {
         let that = this;
-        console.log('fileId', fileId);
         let promise = new Promise((resolve, reject) => {
-            that.webapi.run('grinotes_delete_file', {file_id: fileId}, res => {
+            that.webapi.run('grinotes_delete_file', { file_id: fileId }, res => {
                 if (res['result'] == 'ok') {
 
                     // remove the file from the local list

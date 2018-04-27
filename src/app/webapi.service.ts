@@ -18,13 +18,12 @@ export class WebapiService {
 
     run(awsLambdaName:string, params = {}, callbackFn = undefined) {
         if (!this.authService.isAWSLoggedIn) {
-            console.log('not logged in');
-            let currentWebapiService = this;
             setTimeout(_ => {
-                currentWebapiService.run(awsLambdaName, params, callbackFn);
+                this.run(awsLambdaName, params, callbackFn);
             }, 500);
             return
         }
+
         this.inProgress = true;
         let lambdaParams = {
             FunctionName: awsLambdaName,
@@ -37,7 +36,7 @@ export class WebapiService {
         let that = this;
         lambda.invoke(lambdaParams, (err, data) => {
             this.inProgress = false;
-            
+
             if (err) {
                 console.error('err', err);
                 return;

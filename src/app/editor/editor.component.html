@@ -53,16 +53,6 @@
         </h4>
     </div>
     <!-- FULL! editor with content -->
-    <!--
-        contenteditable="true"
-        [ngClass]="{'right-to-left': filesService.currentFile.hasHebrewLetters}"
-        [ngStyle]="{'height': (configService.winHeight - 160)+'px'}"
-        [innerHTML]="filesService.currentFile.data.content"
-        (input)="filesService.currentFile.changesMade = true; console.log('input');"
-        class="card-text alert border file-content-area"
-
-        filesService.currentFile.content
-    -->
     <app-gredit *ngIf="filesService.currentFile"
         [(content)]="filesService.currentFile.data.content"
         [height]="configService.winHeight - 202"

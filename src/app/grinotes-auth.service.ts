@@ -32,28 +32,10 @@ export class GrinotesAuthService {
                 let grinotesAuth = this;
                 AWS.config.credentials.get(_ => {
                     grinotesAuth.isAWSLoggedIn = true;
-                    
+
                     // fire event forward
                     grinotesAuth.authUpdateEvent.emit(grinotesAuth.user);
                 });
-                
-                /*
-                // Obtain AWS credentials
-                    grinotesAuth.isAWSLoggedIn = true;
-                    // Access AWS resources here.
-                    let params = {
-                        FunctionName: "grinotes_get_files",
-                        Payload: JSON.stringify({
-                            fbid: grinotesAuth.user.id
-                        })
-                    };
-                    let lambda = new AWS.Lambda();
-                    lambda.invoke(params, (err, data) => {
-                        console.log('err', err, 'data', data);
-                    });
-
-                });
-                */
             }
         });
     }
