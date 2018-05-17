@@ -123,8 +123,8 @@ export class EditorComponent implements OnInit {
         }
 
         // prepare the new content
-        const newContent = this.filesService.currentFile.data.content;
-        if (newContent === false) {
+        const newContent = encodeURIComponent(this.filesService.currentFile.data.content);
+        if (!newContent) {
             alert('Cannot get data from the editor');
             return;
         }

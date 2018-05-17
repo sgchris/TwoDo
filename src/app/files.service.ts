@@ -85,6 +85,11 @@ export class FilesService {
         let promise = new Promise((resolve, reject) => {
             this.webapi.run('grinotes_get_file', params, res => {
                 if (res['result'] == 'ok') {
+                    // decode file contents
+                    if (typeof(res['data']) != 'undefined' && typeof(res['data']['content'] != 'undefined')) {
+                        res['data']['content'] = decodeURIComponent(res['data']['content']);
+                    }
+
                     resolve({
                         'data': res['data'],
                         'versions': res['versions'],
