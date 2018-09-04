@@ -1,14 +1,11 @@
-.promo-wrapper {
-    background: transparent url("/assets/images/bg1.jpg") center center no-repeat;
-    min-height: 500px;
-    margin-top: -56px;
+.app-wrapper {
+    height: calc(100% - 80px); /* 24 + 56 */
 }
-
-.promo-text {
-    padding-top: 200px;
-    color: #EEE;
+.app-wrapper > .row {
+    height: 100%;
 }
-
-.promo-text h3 {
-    color: #BBB;
+    
+.folders-sidebar {
+    background: #EEE;
+    min-height: calc(100% - 160px);
 }

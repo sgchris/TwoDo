@@ -2,20 +2,8 @@
 
 # compiled output
 /dist
-/dist-server
 /tmp
 /out-tsc
-
-# Database files
-*.db
-
-# config files
-src/api/tools/config.ini
-src/aws/lambda/grinotes_lambda_functions/lambda/tools/db_creds.py
-src/aws/lambda/grinotes_lambda_functions/index.zip
-
-# php libs
-vendor
 
 # dependencies
 /node_modules
@@ -28,9 +16,6 @@ vendor
 *.launch
 .settings/
 *.sublime-workspace
-.codelite
-*.phprj
-*.workspace
 
 # IDE - VSCode
 .vscode/*
@@ -45,12 +30,9 @@ vendor
 /coverage
 /libpeerconnection.log
 npm-debug.log
+yarn-error.log
 testem.log
 /typings
-
-# e2e
-/e2e/*.js
-/e2e/*.map
 
 # System Files
 .DS_Store

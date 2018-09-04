@@ -1,13 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import url(https://fonts.googleapis.com/css?family=Open%20Sans);
-body {
-    font-family: 'Open Sans', arial;
-}
-
-.content-area-empty {
-    line-height: 100%;
-    font-size: 50px;
-    text-align: center;
-    padding-top: 50px;
-    color: #DDD;
+body, html {
+    height: 100%;
 }

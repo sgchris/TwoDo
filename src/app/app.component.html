@@ -1,79 +1,14 @@
-<!-- the top bar -->
-<app-topbar></app-topbar>
+<app-navbar></app-navbar>
 
-<!--The content below is only a placeholder and can be replaced.-->
-<div class="container-fluid" *ngIf="grinotesAuthService.isLoggedIn">
-    <!-- The two panels -->
+<div class="container-fluid app-wrapper">
     <div class="row">
-        <div class="col col-md-6 col-sm-12">
-            <app-editor [fileId]="selectedFileId"></app-editor>
+        <div class="col-2 folders-sidebar">
+            <app-folders></app-folders>
         </div>
-        <div class="col col-md-6 col-sm-12">
-            <app-files-list (fileSelected)="fileSelected($event);"></app-files-list>
+        <div class="col-10">
+            something here
         </div>
     </div>
 </div>
 
-<!-- not authenticated secion -->
-<div  *ngIf="!grinotesAuthService.isLoggedIn">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col col-sm-12 promo-wrapper">
-                <div class="container">
-                    <div class="row">
-                        <div class="col col-sm-12 promo-text">
-                            <h1>Gri<strong>Notes</strong></h1>
-                            <h3>Grimember things better</h3>
-                            <p>Take notes. Track changes.<br/>Access from anywhere</p>
-                            <br />
-                            <div>
-                                <button type="button"
-                                    class="btn btn-primary"
-                                    (click)="grinotesAuthService.login();"><i class="fab fa-facebook"></i> Login with Facebook</button>
-                            </div>
-                            <small>one more click and you're in!</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br/>
-    <hr/>
-    <br/>
-    <div class="container">
-        <div class="row">
-            <div class="col col-12 col-md-4">
-                <h3>Free</h3>
-                <p>
-                    GriNotes is a <strong>free</strong> and <strong>open source</strong> application
-                    based on common web technologies like AngularJS, Bootstrap and more...<br/>
-                    <br/>
-                    All the codebase is published on <a href="https://github.com/sgchris/grinotes.git" target="_blank">GitHub <i class="fas fa-external-link-alt"></i></a>.
-                </p>
-            </div>
-            <div class="col col-12 col-md-4">
-                <h3>Simple</h3>
-                <p>
-                    Easy and intuitive single page interface.<br />
-                    <strong>No registration required</strong> - the authentication is
-                    done through your Facebook account
-                </p>
-            </div>
-            <div class="col col-12 col-md-4">
-                <h3>Unlimited</h3>
-                <p>
-                    Every file keeps its changes history from the moment of its creation.
-                </p>
-            </div>
-        </div>
-    </div>
-    <br />
-    <br />
-
-
-    <!-- Footer -->
-    <nav class="navbar sticky-bottom navbar-dark bg-dark fixed-bottom">
-        <small><a href="mailto:grinotes.com@gmail.com" style="color:#FFF;">grinotes.com@gmail.com</a></small>
-    </nav>
-</div>
+<app-footer></app-footer>
