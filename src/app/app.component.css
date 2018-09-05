@@ -8,4 +8,5 @@
 .folders-sidebar {
     background: #EEE;
     min-height: calc(100% - 160px);
+    overflow: auto;
 }

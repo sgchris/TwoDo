@@ -1,0 +1,39 @@
+.folders-wrapper .card {
+    cursor: pointer;
+}
+
+.folders-wrapper .card-header {
+    font-size: 14px;
+    line-height: 24px;
+    padding: 5px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: #DDD;
+}
+
+.folder-card-thumb {
+    width: 100px;
+    height: 120px;
+    float: left;
+    margin: 5px;
+    background: rgb(255, 246, 216);
+    border: 1px solid #DDD;
+}
+
+.folder-2-cards {
+    width: 44%;
+    margin: 3%;
+}
+.folder-4-cards {
+    width: 44%;
+    height: 80px;
+    margin: 3%;
+}
+
+.folder-9-cards {
+    width: 31%;
+    margin: 1%;
+    height: 60px;
+}
+
